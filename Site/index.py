@@ -11,7 +11,7 @@ print("path is equal to ",os.getcwd())
 print("path i want is equal to ",os.path.realpath('images'))
 
 app = Flask(__name__)
-app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('save')
+app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -34,13 +34,13 @@ def upload_file():
         file_url = photos.url(filename)
         global html
         html +=  '<br><img src=' + file_url + '><br>'
-        """
+        
         path,element = model(file_url)
         print("this is the file url : ",file_url)
         html = html + '<br><img src=' + file_url + '><br>'
         for el in path :
             html = html + '<img src=' + el + '>'
-        """
+        
         return html
     return html
 
