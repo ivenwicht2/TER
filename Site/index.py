@@ -6,12 +6,13 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 import sys
 sys.path.insert(1, 'script')
 from backend import model
-
 print("path is equal to ",os.getcwd())
 print("path i want is equal to ",os.path.realpath('images'))
 
 app = Flask(__name__)
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
+
+
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
@@ -45,4 +46,4 @@ def upload_file():
     return html
 
 
-app.run()
+app.run(threaded=False)
