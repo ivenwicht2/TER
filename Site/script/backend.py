@@ -31,8 +31,10 @@ def model(url):
     with open(r"script\save\path.txt", "rb") as fp:   # Unpickling
         path_total = pickle.load(fp)
     path = []
-    for i in range(len(index)): 
-        path.append(path_total[index[i]])
+    for i in range(len(index)):
+        tmp = "/static/" + path_total[index[i]].replace("\\","/") 
+        path.append(tmp)
+        #path.append(path_total[index[i]])
         print(path_total[index[i]])
     return path,Class[pred]
 

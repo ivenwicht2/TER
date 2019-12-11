@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, request
+from flask import Flask, request,render_template,url_for
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import sys
 sys.path.insert(1, 'script')
@@ -9,14 +9,16 @@ from backend import model
 print("path is equal to ",os.getcwd())
 print("path i want is equal to ",os.path.realpath('images'))
 
-app = Flask(__name__)
+
+
+app = Flask(__name__,static_url_path='/static')
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
 
 
 
 photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
-patch_request_class(app)  # set maximum file size, default is 16MB
+patch_request_class(app)  
 
 html = '''
     <!DOCTYPE html>
@@ -33,16 +35,8 @@ def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
-        global html
-        html +=  '<br><img src=' + file_url + '><br>'
-        
         path,element = model(file_url)
-        print("this is the file url : ",file_url)
-        html = html + '<br><img src=' + file_url + '><br>'
-        for el in path :
-            html = html + '<img src=' + el + '>'
-        
-        return html
+        return render_template('index.html',image = file_url,label = element, results=path)
     return html
 
 
