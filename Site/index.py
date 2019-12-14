@@ -14,7 +14,7 @@ import numpy as np
 
 
 
-app = Flask(__name__,static_url_path='/static')
+app = Flask(__name__)
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
 
 
@@ -23,7 +23,7 @@ photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app)  
 
-html = '''
+"""html = '''
     <!DOCTYPE html>
     <title>Upload File</title>
     <h1>Photo Upload</h1>
@@ -31,8 +31,7 @@ html = '''
          <input type=file name=photo>
          <input type=submit value=Upload>
     </form>
-    '''
-
+    '''"""
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
@@ -46,8 +45,9 @@ def upload_file():
             img.save(file_object, 'jpeg',quality=100)
             figdata_jgp = base64.b64encode(file_object.getvalue())
             result.append(figdata_jgp.decode('ascii'))
-        return render_template('index.html',image = file_url,label = element, results=result)
-    return html
+        return render_template('display.html',image = file_url,label = element, results=result)
+    return render_template('index.html')
 
 
 app.run(threaded=False)
+render_template('index.html')
