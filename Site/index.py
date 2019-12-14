@@ -6,8 +6,11 @@ from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_cl
 import sys
 sys.path.insert(1, 'script')
 from backend import model
-print("path is equal to ",os.getcwd())
-print("path i want is equal to ",os.path.realpath('images'))
+import io
+from PIL import Image
+import base64
+import numpy as np
+
 
 
 
@@ -36,7 +39,14 @@ def upload_file():
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
         path,element = model(file_url)
-        return render_template('index.html',image = file_url,label = element, results=path)
+        result = []
+        for el in path :
+            img = Image.fromarray((el * 255).astype(np.uint8))
+            file_object = io.BytesIO()
+            img.save(file_object, 'jpeg',quality=100)
+            figdata_jgp = base64.b64encode(file_object.getvalue())
+            result.append(figdata_jgp.decode('ascii'))
+        return render_template('index.html',image = file_url,label = element, results=result)
     return html
 
 

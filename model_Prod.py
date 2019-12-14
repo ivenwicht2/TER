@@ -14,6 +14,7 @@ import pickle
 
 data_dir = pathlib.Path("DATA")
 image_count = len(list(data_dir.glob('*/*')))
+CLASS_NAMES = np.array([item.name for item in data_dir.glob('*') if item.name != "LICENSE.txt"]) 
 image_generator = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255) # redimension des images
 BATCH_SIZE = image_count
 IMG_HEIGHT = 224
@@ -27,7 +28,7 @@ train_data_gen = image_generator.flow_from_directory(directory=str(data_dir),
 #On importe les images
 with open(r"Sauvegarde modèle/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
      pickle.dump(train_data_gen.filenames, fp)
-
+image_batch, label_batch = next(train_data_gen)
 def augm(datagen):
     """
     Fonction qui renvoie une liste d'images modifier.
