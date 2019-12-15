@@ -6,35 +6,32 @@ import numpy as np
 import pickle
 import os
 
-
 def model(url):
-    print("path is equal to ",os.getcwd())
-    tmp = "C:\\Users\\theoo\\OneDrive\\Documents\\GitHub\\TER\Site\\images\\"
+    tmp = os.path.realpath('images')
     url = url.split(r'/')[-1]
-    url = tmp + url
+    url = tmp + "\\" + url
     im = Image.open(url)
     im = im.convert('RGB')
     im = im.resize((224,224), Image.ANTIALIAS)
     im = np.array(im)
     im = np.expand_dims(im, axis=0)
-    model = load_model(r"script\save\model_sauvegarde",)
-    representation = load_model(r"script\save\simi_sauvegarde")
-    img = np.load(r"script\save\img.npy")
-    label = np.load(r"script\save\label.npy")
-    Class = np.load(r"script\save\class.npy")
-    simi = np.load(r"script\save\representation.npy")
+    model = load_model("script/save/model_sauvegarde",)
+    representation = load_model("script/save/simi_sauvegarde")
+    img = np.load("script/save/img.npy")
+    Class = np.load("script/save/class.npy")
+    simi = np.load("script/save/representation.npy")
     pred = model.predict(im)
     pred = pred.argmax(axis=1)[0]
     quer = representation.predict(im)[0]
     nb = 6
-    distance,index = spatial.KDTree(simi).query(quer,k=nb+1)
-    with open(r"script\save\path.txt", "rb") as fp:   # Unpickling
+    save_img = []
+    _,index = spatial.KDTree(simi).query(quer,k=nb)
+    with open("script/save/path.txt", "rb") as fp:  
         path_total = pickle.load(fp)
     path = []
     for i in range(len(index)):
         tmp = "/static/" + path_total[index[i]].replace("\\","/") 
         path.append(tmp)
-        #path.append(path_total[index[i]])
-        print(path_total[index[i]])
-    return path,Class[pred]
+        save_img.append(img[index[i]])
+    return save_img,Class[pred]
 
