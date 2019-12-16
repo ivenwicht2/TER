@@ -12,6 +12,8 @@ from scipy import spatial
 import pathlib
 from sklearn.model_selection import train_test_split
 import pickle
+import matplotlib.pyplot as plt
+
 
 data_dir = pathlib.Path("DATA")
 image_count = len(list(data_dir.glob('*/*')))
