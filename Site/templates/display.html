@@ -6,11 +6,9 @@
 <body>
     <td>{{ label }}</td><br>
     <img src="{{ image }}" alt="Main Image" height="150" width="150"><br>
-     {% for img_name in results %}
-                <tr>
+     {% for img_name,label_simi in results %}
+                <tr> <td>{{ label_simi }}</td>
                     <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
-                    <!--<td><img src="{{ img_name }}" alt="{{ img_name }}" height="150" width="150"></td>-->
-                    <!--<img src="{{url_for('static', filename='{{ img_name }}')}}" />-->
                 </tr>
             {% endfor %}
 </body>

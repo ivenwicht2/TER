@@ -37,7 +37,7 @@ def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
-        path,element = model(file_url)
+        path,label,element = model(file_url)
         result = []
         for el in path :
             img = Image.fromarray((el * 255).astype(np.uint8))
@@ -45,7 +45,7 @@ def upload_file():
             img.save(file_object, 'jpeg',quality=100)
             figdata_jgp = base64.b64encode(file_object.getvalue())
             result.append(figdata_jgp.decode('ascii'))
-        return render_template('display.html',image = file_url,label = element, results=result)
+        return render_template('display.html',image = file_url,label = element, results=zip(result,label))
     return render_template('index.html')
 
 

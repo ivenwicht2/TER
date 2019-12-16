@@ -17,6 +17,7 @@ def model(url):
     im = np.expand_dims(im, axis=0)
     model = load_model("script/save/model_sauvegarde",)
     representation = load_model("script/save/simi_sauvegarde")
+    label= np.load("script/save/label.npy")
     img = np.load("script/save/img.npy")
     Class = np.load("script/save/class.npy")
     simi = np.load("script/save/representation.npy")
@@ -29,9 +30,11 @@ def model(url):
     with open("script/save/path.txt", "rb") as fp:  
         path_total = pickle.load(fp)
     path = []
+    label_simi = []
     for i in range(len(index)):
-        tmp = "/static/" + path_total[index[i]].replace("\\","/") 
-        path.append(tmp)
+        tmp = np.expand_dims( label[index[i]], axis=0)
+        tmp =  tmp.argmax(axis=1)[0]
+        label_simi.append(Class[tmp])
         save_img.append(img[index[i]])
-    return save_img,Class[pred]
+    return save_img,label_simi,Class[pred]
 
