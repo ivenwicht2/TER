@@ -77,7 +77,21 @@ model_final = Model(input = model.input, output = predictions)
 model_final.compile(loss = "categorical_crossentropy", optimizer = optimizers.SGD(lr=0.0001, momentum=0.9), metrics=["accuracy"])
 history = model_final.fit(trainX, trainY, epochs=10, 
                     validation_data=(testX, testY))
-
+metric_result = model_final.predict(testX, batch_size=batch_size, verbose=1)
+predicted_classes = np.argmax(metric_result, axis=1)
+print(classification_report(testY, predicted_classes, 
+        target_names=CLASS_NAMES , digits = 6))
+############# sauvegarde résultat epoch #####################
+model_final.save("model_save/model_sauvegarde")
+plt.plot(history.history['accuracy'], label='accuracy')
+plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy')
+plt.ylim([0, 1])
+plt.legend(loc='lower right')
+plt.savefig('Epoch.png')
+model_simi = Model(input = model.input, output =x)
+###############################################################
 model_final.save("Sauvegarde modèle/model_sauvegarde")
 
 model_simi = Model(input = model.input, output =x)
