@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from PIL import Image
 import numpy as np
 import os
@@ -29,13 +28,13 @@ train_data_gen = image_generator.flow_from_directory(directory=str(data_dir),
                                                      target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                      classes = list(CLASS_NAMES))
 #On importe les images
-with open(r"Sauvegarde modèle/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
+with open("model_save/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
      pickle.dump(train_data_gen.filenames, fp)
 image_batch, label_batch = next(train_data_gen)
 def augm(datagen):
     """
     Fonction qui renvoie une liste d'images modifier.
-    Entrée : Mofication de type keras.preprocessing.image.ImageDataGenerator.
+    Entree : Mofication de type keras.preprocessing.image.ImageDataGenerator.
     Sortie : Images modifier sous forme de liste numpy.
     """
     datagen.fit(image_batch)
@@ -95,19 +94,19 @@ plt.legend(loc='lower right')
 plt.savefig('Epoch.png')
 model_simi = Model(input = model.input, output =x)
 ###############################################################
-model_final.save("Sauvegarde modèle/model_sauvegarde")
+model_final.save("model_save/model_sauvegarde")
 
 model_simi = Model(input = model.input, output =x)
 
-pred = model_simi.predict(image_batch) # prédiction sur toutes les images non modifié 
+pred = model_simi.predict(image_batch) # prediction sur toutes les images non modifie 
 
-model_simi.save("Sauvegarde modèle/simi_sauvegarde")
-np.save('Sauvegarde modèle/representation.npy',  pred)
-np.save('Sauvegarde modèle/img.npy', image_batch )
-np.save('Sauvegarde modèle/label.npy', label_batch )
-np.save('Sauvegarde modèle/class.npy', CLASS_NAMES )
+model_simi.save("model_save/simi_sauvegarde")
+np.save('model_save/representation.npy',  pred)
+np.save('model_save/img.npy', image_batch )
+np.save('model_save/label.npy', label_batch )
+np.save('model_save/class.npy', CLASS_NAMES )
 
-with open(r"Sauvegarde modèle/result.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
+with open("model_save/result.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
      pickle.dump(test_acc, fp)
 =======
 from PIL import Image
@@ -138,7 +137,7 @@ train_data_gen = image_generator.flow_from_directory(directory=str(data_dir),
                                                      target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                      classes = list(CLASS_NAMES))
 #On importe les images
-with open(r"Sauvegarde modèle/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
+with open(r"model_save/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
      pickle.dump(train_data_gen.filenames, fp)
 image_batch, label_batch = next(train_data_gen)
 def augm(datagen):
@@ -190,18 +189,17 @@ model_final.compile(loss = "categorical_crossentropy", optimizer = optimizers.SG
 history = model_final.fit(trainX, trainY, epochs=10, 
                     validation_data=(testX, testY))
 
-model_final.save("Sauvegarde modèle/model_sauvegarde")
+model_final.save("model_save/model_sauvegarde")
 
 model_simi = Model(input = model.input, output =x)
 
-pred = model_simi.predict(image_batch) # prédiction sur toutes les images non modifié 
+pred = model_simi.predict(image_batch) # prediction sur toutes les images non modifie
 
-model_simi.save("Sauvegarde modèle/simi_sauvegarde")
-np.save('Sauvegarde modèle/representation.npy',  pred)
-np.save('Sauvegarde modèle/img.npy', image_batch )
-np.save('Sauvegarde modèle/label.npy', label_batch )
-np.save('Sauvegarde modèle/class.npy', CLASS_NAMES )
+model_simi.save("model_save/simi_sauvegarde")
+np.save('model_save/representation.npy',  pred)
+np.save('model_save/img.npy', image_batch )
+np.save('model_save/label.npy', label_batch )
+np.save('model_save/class.npy', CLASS_NAMES )
 
-with open(r"Sauvegarde modèle/result.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
+with open("model_save/result.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
      pickle.dump(test_acc, fp)
->>>>>>> a1b42034194b750a7a9e796336b80b1c2e79f38f
