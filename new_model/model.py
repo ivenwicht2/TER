@@ -33,7 +33,7 @@ model=Model(inputs=base.input,outputs=preds)
 
 
 
-model.compile(optimizer='Adam',loss='categorical_crossentropy',metrics=['accuracy'])
+model.compile(loss = "categorical_crossentropy", optimizer = optimizers.SGD(lr=0.0001, momentum=0.9), metrics=["accuracy"])
    
 history = model.fit(new_trainX, new_trainY, epochs=10,validation_data=(new_testX, new_testY))
 
