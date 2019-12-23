@@ -1,12 +1,11 @@
 from PIL import Image
 import numpy as np
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="-1"   
 from keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 from keras.models import Sequential, Model
 from keras import applications
-from keras.layers import Dropout, Flatten, Dense, Dropout
+from keras.layers import Dropout, Flatten, Dense
 from keras import optimizers
 from scipy import spatial
 import pathlib
@@ -14,7 +13,8 @@ from sklearn.model_selection import train_test_split
 import pickle
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
-
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
+#sess = tf.compat.v1.Session(config=tf.compat.v1.ConfigProto(log_device_placement=True))
 
 data_dir = pathlib.Path("DATA")
 image_count = len(list(data_dir.glob('*/*')))
@@ -30,18 +30,16 @@ train_data_gen = image_generator.flow_from_directory(directory=str(data_dir),
                                                      target_size=(IMG_HEIGHT, IMG_WIDTH),
                                                      classes = list(CLASS_NAMES))
 #On importe les images
-with open("model_save/path.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
-     pickle.dump(train_data_gen.filenames, fp)
 image_batch, label_batch = next(train_data_gen)
-def augm(datagen):
+def augm(datagen,img_dt):
     """
     Fonction qui renvoie une liste d'images modifier.
     Entree : Mofication de type keras.preprocessing.image.ImageDataGenerator.
     Sortie : Images modifier sous forme de liste numpy.
     """
-    datagen.fit(image_batch)
+    datagen.fit(img_dt)
     augmT = []
-    for el in datagen.flow(image_batch,shuffle=False,batch_size=BATCH_SIZE):
+    for el in datagen.flow(img_dt,shuffle=False,batch_size=BATCH_SIZE):
         for i in range(0, len(el)):
             if i == 0 : augmT.append(el[i])
             else : augmT.append(el[i])
@@ -50,24 +48,30 @@ def augm(datagen):
     augmT =  np.array(augmT)
     return augmT
 
+
+(trainX, testX, trainY, testY) = train_test_split(image_batch, label_batch, test_size=0.25) 
+
 datagen = []
 datagen.append(ImageDataGenerator(rotation_range=30))
 datagen.append(ImageDataGenerator(zoom_range=[0.5,1.0]))
-datagen.append(ImageDataGenerator(brightness_range=[0.9,1.01]))
-datagen.append(ImageDataGenerator(fill_mode='constant'))
-datagen.append(ImageDataGenerator(cval=255))
+datagen.append(ImageDataGenerator(brightness_range=[0.2,1.0]))
+datagen.append(ImageDataGenerator(horizontal_flip=True))
 datagen.append(ImageDataGenerator(width_shift_range=[-50,50]))
+datagen.append(ImageDataGenerator(height_shift_range=0.5))
 
 
 for i,gen in enumerate(datagen) :
     if i == 0:
-        new_img =  np.concatenate((image_batch,augm(gen)))
-        new_label =  np.concatenate((label_batch,label_batch))
+        new_testX =  np.concatenate((testX,augm(gen,testX)))
+        new_trainX =  np.concatenate((trainX,augm(gen,trainX)))
+        new_testY =  np.concatenate((testY,testY))
+        new_trainY =  np.concatenate((trainY,trainY))
     else: 
-        new_img =  np.concatenate((new_img,augm(gen)))
-        new_label =  np.concatenate((new_label,label_batch))
+        new_testX =  np.concatenate((new_testX,augm(gen,testX)))
+        new_trainX =  np.concatenate((new_trainX,augm(gen,trainX)))
+        new_testY =  np.concatenate((new_testY,testY))
+        new_trainY =  np.concatenate((new_trainY,trainY))
 
-(trainX, testX, trainY, testY) = train_test_split(new_img, new_label, test_size=0.25)
 
 model = applications.VGG19(weights = "imagenet", include_top=False, input_shape = (224, 224, 3)) # transfer learning
 x = model.output
@@ -79,14 +83,18 @@ predictions = Dense(len(CLASS_NAMES), activation="softmax")(x)
 
 model_final = Model(input = model.input, output = predictions)
 model_final.compile(loss = "categorical_crossentropy", optimizer = optimizers.SGD(lr=0.0001, momentum=0.9), metrics=["accuracy"])
-history = model_final.fit(trainX, trainY, epochs=10, 
-                    validation_data=(testX, testY))
-metric_result = model_final.predict(testX, batch_size=batch_size, verbose=1)
-predicted_classes = np.argmax(metric_result, axis=1)
-print(classification_report(testY, predicted_classes, 
+history = model_final.fit(new_trainX,new_trainY, epochs=10, 
+                    validation_data=(new_testX, new_testY))
+metric_result = model_final.predict(new_testX, batch_size=len(new_testX), verbose=1)
+
+predicted_classes = np.argmax(metric_result , axis=1)
+test_matrice = np.argmax(new_testY, axis=1)
+
+print(classification_report(test_matrice, predicted_classes, 
         target_names=CLASS_NAMES , digits = 6))
-############# sauvegarde résultat epoch #####################
+
 model_final.save("model_save/model_sauvegarde")
+############# sauvegarde resultat epoch #####################
 plt.plot(history.history['accuracy'], label='accuracy')
 plt.plot(history.history['val_accuracy'], label = 'val_accuracy')
 plt.xlabel('Epoch')
@@ -96,7 +104,6 @@ plt.legend(loc='lower right')
 plt.savefig('Epoch.png')
 model_simi = Model(input = model.input, output =x)
 ###############################################################
-model_final.save("model_save/model_sauvegarde")
 
 model_simi = Model(input = model.input, output =x)
 
@@ -108,5 +115,3 @@ np.save('model_save/img.npy', image_batch )
 np.save('model_save/label.npy', label_batch )
 np.save('model_save/class.npy', CLASS_NAMES )
 
-with open("model_save/result.txt", "wb") as fp:  #sauvegarde de l'emplacement des fichiers
-     pickle.dump(test_acc, fp)
