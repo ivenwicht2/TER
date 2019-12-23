@@ -27,9 +27,6 @@ def model(url):
     nb = 6
     save_img = []
     _,index = spatial.KDTree(simi).query(quer,k=nb)
-    with open("script/save/path.txt", "rb") as fp:  
-        path_total = pickle.load(fp)
-    path = []
     label_simi = []
     for i in range(len(index)):
         tmp = np.expand_dims( label[index[i]], axis=0)

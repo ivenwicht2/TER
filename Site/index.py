@@ -23,15 +23,6 @@ photos = UploadSet('photos', IMAGES)
 configure_uploads(app, photos)
 patch_request_class(app)  
 
-"""html = '''
-    <!DOCTYPE html>
-    <title>Upload File</title>
-    <h1>Photo Upload</h1>
-    <form method=post enctype=multipart/form-data>
-         <input type=file name=photo>
-         <input type=submit value=Upload>
-    </form>
-    '''"""
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST' and 'photo' in request.files:
