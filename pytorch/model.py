@@ -4,61 +4,105 @@ from torch import nn , optim
 import torch
 from torch.utils.data import DataLoader
 import numpy as np
+import time
+
 
 class Convnet :
     def __init__(self,classe):
         print("création du modèle : ",end='')
         self.classe = classe
-        device = torch.device("cpu")
-        self.model = models.vgg19(pretrained=True)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = models.densenet121(pretrained=True)
         for param in self.model.parameters():
             param.requires_grad = False
-        self.ftrs = self.model.classifier[6].in_features
-        features = list(self.model.classifier.children())[:-1]
-        features.extend([torch.nn.Linear(self.ftrs, classe)])
-        self.model.classifier = torch.nn.Sequential(*features)
-        self.model = self.model.to(device)
-        self.criteration = nn.CrossEntropyLoss()
-        self.optimizer = optim.Adam( self.model.parameters())
+
+        fc = nn.Sequential(
+            nn.Linear(1024, 460),
+            nn.ReLU(),
+            nn.Dropout(0.4),
+            
+            nn.Linear(460,2),
+            nn.LogSoftmax(dim=1)   
+        )
+
+        self.model.classifier = fc
+
+        self.criterion = nn.NLLLoss()
+        self. optimizer = torch.optim.Adam(self.model.classifier.parameters(), lr=0.003)
+        self.model.to(self.device)
+
         print('done')
-    def train(self,n_epochs,train,test):
+
+    def train(self,epochs,train_loader,valid_loader):
         print("training")
-        train_loader = train
-        test_loader = test
-        for epoch in range(n_epochs):
-            print("epoch {} : ".format(epoch),end='')
-            val_loss_train = []
-            val_loss_test = []
-            true_result = 0
-            total = 0
-            for (data_train, targets_train) , (data_test , targets_test) in zip(train_loader,test_loader):
-               
-                # Train
-                out = self.model(data_train)
-                loss = self.criteration(out, targets_train)
+
+        valid_loss_min = np.Inf
+        for epoch in range(epochs):
+    
+            start = time.time()
+    
+            #scheduler.step()
+            self.model.train()
+    
+            train_loss = 0.0
+            valid_loss = 0.0
+    
+            for inputs, labels in train_loader:
+        
+       
+                # Move input and label tensors to the default device
+                inputs, labels = inputs.to(self.device), labels.to(self.device)
+        
+                self.optimizer.zero_grad()
+            
+                logps = self.model(inputs)
+                loss = self.criterion(logps, labels)
                 loss.backward()
                 self.optimizer.step()
-                val_loss_train.append(loss.item())
+                train_loss += loss.item()
+        
+       
+            self.model.eval()
+    
+            with torch.no_grad():
+                accuracy = 0
+                for inputs, labels in valid_loader:
+            
+                        inputs, labels = inputs.to(self.device), labels.to(self.device)
+                        logps = self.model.forward(inputs)
+                        batch_loss = self.criterion(logps, labels)
+                        valid_loss += batch_loss.item()
+                        # Calculate accuracy
+                        ps = torch.exp(logps)
+                        top_p, top_class = ps.topk(1, dim=1)
+                        equals = top_class == labels.view(*top_class.shape)
+                        accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
+                        
+            # calculate average losses
+            train_loss = train_loss/len(train_loader)
+            valid_loss = valid_loss/len(valid_loader)
+            valid_accuracy = accuracy/len(valid_loader) 
+      
+            # print training/validation statistics 
+            print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f} \tValidation Accuracy: {:.6f}'.format(
+                epoch + 1, train_loss, valid_loss, valid_accuracy))
+            
+            """if valid_loss <= valid_loss_min:      
+                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
+                valid_loss_min,
+                valid_loss))
+                model_save_name = "test"
+                path = F"/content/drive/My Drive/{model_save_name}"
+                torch.save(model.state_dict(), path)
+                valid_loss_min = valid_loss 
+            """      
 
-                # Test 
-                out = self.model(data_test)
-                loss = self.criteration(out, targets_test)
-                val_loss_test.append(loss.item())
-                for output,label in zip(out.detach().numpy(), targets_test.detach().numpy()):
-                    if np.argmax(output) == label : true_result  += 1
-                    total += 1
-
-                print('-',end='')
-            acc = true_result / total
-
-            val_loss_train =  np.average(val_loss_train)
-            val_loss_test =  np.average(val_loss_test)
-            print('> training loss: ', val_loss_train,' test loss: ',val_loss_test,' acc_test : ',acc)
+            print(f"Time per epoch: {(time.time() - start):.3f} seconds")
 
 
 if __name__ == '__main__' :
 
     test = Convnet(2)
     #print(test.model)
-    traind,testd = import_img("DATA")
-    test.train(10,testd,traind)
+    trainloader,testloader = import_img("DATA")
+    test.train(100,trainloader,testloader)

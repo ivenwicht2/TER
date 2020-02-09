@@ -1,77 +1,49 @@
 from torch.utils.data import DataLoader,Dataset,ConcatDataset
 import torch
-from torchvision import transforms
+from torchvision import transforms , datasets
 from torchvision.datasets import ImageFolder
+from torch.utils.data.sampler import SubsetRandomSampler
 
-class DatasetFromSubset(Dataset):
-    def __init__(self, subset, transform=None):
-        self.subset = subset
-        self.transform = transform
+import numpy as np  
 
-    def __getitem__(self, index):
-        x, y = self.subset[index]
-        if self.transform:
-            x = self.transform(x)
-        return x, y
+def import_img(PATH):
+    train_transforms = transforms.Compose([transforms.RandomResizedCrop(size=256, scale=(0.8, 1.0)),
+                                        transforms.RandomRotation(degrees=15),
+                                        transforms.ColorJitter(),
+                                        transforms.RandomHorizontalFlip(),
+                                        transforms.CenterCrop(size=224),  # Image net standards
+                                        transforms.ToTensor(),
+                                        transforms.Normalize([0.485, 0.456, 0.406],
+                                                            [0.229, 0.224, 0.225])
+                                        ])
 
-    def __len__(self):
-        return len(self.subset)
+    validation_transforms = transforms.Compose([transforms.Resize(256),
+                                            transforms.CenterCrop(224),
+                                            transforms.ToTensor(),
+                                            transforms.Normalize([0.485, 0.456, 0.406], 
+                                                                 [0.229, 0.224, 0.225])])
 
-def import_img(path) :
-    print('importation images : ',end='')
-    transform = transforms.Compose([
-        transforms.Resize((224,224)),
-        transforms.ToTensor()
-    ])
-    
-    datasets = ImageFolder(root=path,transform=transform)
-    split_size = int(0.7 * len(datasets))
+    train_data = datasets.ImageFolder(PATH,transform=train_transforms)
 
-    train_dataset, test_dataset = torch.utils.data.random_split(datasets, [split_size, len(datasets)-split_size])
-
-    train_set = data_augmentation(train_dataset)
-    train_loader = DataLoader(train_set,
-                            batch_size=25,
-                            shuffle=True
-                            )
-    test_set = data_augmentation(test_dataset)
-    test_loader = DataLoader(test_set,
-                            batch_size=25,
-                            shuffle=True
-                            )
-    print('done')
-    print('Image number  : ',len(datasets))
-    print('New image number : ',(len(train_set)+len(test_set)))
-
-    return train_loader, test_loader
-
-def data_augmentation(dataset):
-
-    transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.RandomHorizontalFlip(),
-        transforms.ToTensor()
-    ])
-
-    d1 = DatasetFromSubset(dataset,transform)
-
-    transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.RandomResizedCrop(224),
-        transforms.ToTensor()
-    ])
+    num_workers = 2
+    valid_size = 0.3
 
 
-    d2 =  DatasetFromSubset(dataset,transform)
+    num_train = len(train_data)
+    indices = list(range(num_train))
+    np.random.shuffle(indices)
+    valid_split = int(np.floor((valid_size) * num_train))
+    valid_idx, train_idx = indices[:valid_split], indices[valid_split:]
 
-    transform = transforms.Compose([
-        transforms.ToPILImage(),
-        transforms.CenterCrop(224),
-        transforms.ToTensor()
-    ])
+    print(len(valid_idx), len(train_idx))
 
-    d3 =  DatasetFromSubset(dataset,transform)
+    train_sampler = SubsetRandomSampler(train_idx)
+    valid_sampler = SubsetRandomSampler(valid_idx)
 
-    return ConcatDataset([d1,d2,d3])
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=32,
+        sampler=train_sampler, num_workers=num_workers)
+    valid_loader = torch.utils.data.DataLoader(train_data, batch_size=32, 
+        sampler=valid_sampler, num_workers=num_workers)
 
 
+    return train_loader,valid_loader
