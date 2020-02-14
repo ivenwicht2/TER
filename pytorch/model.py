@@ -29,6 +29,7 @@ def Convnet(model_type,classe) :
             for param in model.parameters():
                 param.requires_grad = False
                 in_features= 1024
+            
 
         fc = nn.Sequential(
             nn.Linear(in_features, 460),
@@ -39,6 +40,19 @@ def Convnet(model_type,classe) :
         )
         model.classifier = fc
         return model    
+
+def pre_train(path,in_features,classe):
+        print("chargement du modèle sauvegardé")
+        model = torch.load(path)
+        model.classifier = nn.Sequential(*list(model.classifier.children())[:-4])
+        fc = nn.Sequential(
+            nn.Linear(in_features, 460),
+            nn.ReLU(),
+            nn.Dropout(0.4),  
+            nn.Linear(460,classe),  
+        )
+        model.classifier = fc
+        return model 
 
 def softmax(x):
     e_x = np.exp(x - np.max(x))
@@ -64,10 +78,12 @@ def pred(model,input) :
 
 if __name__ == '__main__' :
 
-    test = Convnet('vgg16',3)
+    #test = Convnet('pre_train',3)
+    test = pre_train("model/model",25088,3)
     trainloader,testloader = import_img("DATA")
     test = train_model(test,trainloader,testloader,3)
-
+    
+    
     from PIL import Image
     import torchvision.transforms.functional as TF
 
