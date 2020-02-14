@@ -4,10 +4,18 @@ import numpy as np
 import time
 
 def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
-        print("cuda" if torch.cuda.is_available() else "cpu")
+        print("support : ",end='')
+        support = "cuda" if torch.cuda.is_available() else "cpu"
+        print(support)
         print("training")
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        criterion = nn.CrossEntropyLoss().cuda()
+        if support == "cuda":
+            device = torch.device("cuda")
+            criterion = nn.CrossEntropyLoss().cuda()
+        else : 
+            device = torch.device("cpu")
+            criterion = nn.CrossEntropyLoss().cpu()
+
+            
         optimizer = torch.optim.Adam(model.classifier.parameters(), lr=lr)
         model.to(device)
         valid_loss_min = np.Inf
@@ -42,12 +50,11 @@ def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
                 for inputs, labels in valid_loader:
             
                         inputs, labels = inputs.to(device), labels.to(device)
-                        logps = model.forward(inputs)
-                        batch_loss = criterion(logps, labels)
+                        output = model.forward(inputs)
+                        batch_loss = criterion(output, labels)
                         valid_loss += batch_loss.item()
                         # Calculate accuracy
-                        ps = torch.exp(logps)
-                        top_p, top_class = ps.topk(1, dim=1)
+                        top_p, top_class = output.topk(1, dim=1)
                         equals = top_class == labels.view(*top_class.shape)
                         accuracy += torch.mean(equals.type(torch.FloatTensor)).item()
                         
@@ -71,3 +78,4 @@ def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
             """      
 
             print(f"Time per epoch: {(time.time() - start):.3f} seconds")
+        return model
