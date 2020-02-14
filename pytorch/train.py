@@ -67,15 +67,12 @@ def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
             print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f} \tValidation Accuracy: {:.6f}'.format(
                 epoch + 1, train_loss, valid_loss, valid_accuracy))
             
-            """if valid_loss <= valid_loss_min:      
-                print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
-                valid_loss_min,
-                valid_loss))
-                model_save_name = "test"
-                path = F"/content/drive/My Drive/{model_save_name}"
-                torch.save(model.state_dict(), path)
+            if valid_loss <= valid_loss_min:      
+                model_save_name = "model"
+                path = f"model/{model_save_name}"
+                #torch.save(model.state_dict(), path)
+                torch.save(model, path)
                 valid_loss_min = valid_loss 
-            """      
 
             print(f"Time per epoch: {(time.time() - start):.3f} seconds")
         return model
