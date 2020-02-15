@@ -2,8 +2,12 @@ from torch import nn , optim
 import torch
 import numpy as np
 import time
+import os 
 
-def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
+#os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+
+
+def train_model(model,train_loader,valid_loader,epochs,lr=0.01,save=0):
         print("support : ",end='')
         support = "cuda" if torch.cuda.is_available() else "cpu"
         print(support)
@@ -67,7 +71,7 @@ def train_model(model,train_loader,valid_loader,epochs,lr=0.01):
             print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f} \tValidation Accuracy: {:.6f}'.format(
                 epoch + 1, train_loss, valid_loss, valid_accuracy))
             
-            if valid_loss <= valid_loss_min:      
+            if valid_loss <= valid_loss_min and save == 1:      
                 model_save_name = "model"
                 path = f"model/{model_save_name}"
                 #torch.save(model.state_dict(), path)
