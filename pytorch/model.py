@@ -57,6 +57,8 @@ def pre_train(path,in_features,classe):
 def softmax(x):
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum()
+    
+
 
 def pred(model,input) :
     support = "cuda" if torch.cuda.is_available() else "cpu"
@@ -69,19 +71,21 @@ def pred(model,input) :
     print("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     input = input.to(device)
+    simi = None
+    def hook(module, input_, output):
+        nonlocal simi
+        simi = output
+    model.classifier[1].register_forward_hook(hook)
     output = model.forward(input)
-    print(output.cpu().detach().numpy())
     proba = softmax(output.cpu().detach().numpy())
     predicted = np.argmax(proba)
-    
-    print(predicted,proba)
-
+    return predicted , simi.cpu().detach().numpy()
 if __name__ == '__main__' :
 
-    #test = Convnet('pre_train',3)
-    test = pre_train("model/model",25088,3)
-    trainloader,testloader = import_img("DATA")
-    test = train_model(test,trainloader,testloader,3)
+    test = Convnet('vgg16',3)
+    #test = pre_train("model/model",25088,3)
+    #trainloader,testloader = import_img("DATA")
+   # test = train_model(test,trainloader,testloader,3,1)
     
     
     from PIL import Image
