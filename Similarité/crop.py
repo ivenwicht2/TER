@@ -49,7 +49,8 @@ def stack_rep(path):
     for r, d, f in os.walk(path):
         for file in f:
             if '.jpg' in file:
-                rep = extraction_rep(os.path.join(r, file))
+                image = Image.open(os.path.join(r, file))/255
+                rep = extraction_rep(image)
                 representation[0].append(rep)
                 representation[1].append(os.path.join(r, file))
     pickle.dump(representation, open('save/representation.npy', 'wb'))
