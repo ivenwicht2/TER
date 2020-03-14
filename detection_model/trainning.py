@@ -1,33 +1,44 @@
 import torch
-from dataset import import_dataset
+from dataset import PennFudanDataset
 from engine import train_one_epoch, evaluate
 import utils
 from model_build import detection
+import os
+import transforms as T
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+
+def get_transform(train):
+    transforms = []
+    transforms.append(T.ToTensor())
+    if train:
+        transforms.append(T.RandomHorizontalFlip(0.5))
+    return T.Compose(transforms)
 
 def train():
+
+    print('start')
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     # our dataset has two classes only - background and person
     num_classes = 10
     # use our dataset and defined transformations
-    image , target = import_dataset("C:/Users/theoo/OneDrive/Documents/ter/test/VOCdevkit")
+    dataset = PennFudanDataset('VOCdevkit',get_transform(train=True))
+    dataset_test = PennFudanDataset('VOCdevkit',get_transform(train=False))
     # split the dataset in train and test set
-    df = (image , target)
-    indices = torch.randperm(len(df)).tolist()
-    dataset = torch.utils.data.Subset(df, indices[:-50])
-    dataset_test = torch.utils.data.Subset(df, indices[-50:])
+    indices = torch.randperm(len(dataset)).tolist()
+    dataset = torch.utils.data.Subset(dataset, indices[:-50])
+    dataset_test = torch.utils.data.Subset(dataset_test, indices[-50:])
 
     # define training and validation data loaders
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=2, shuffle=True, num_workers=4,
+        dataset, batch_size=1, shuffle=True, num_workers=4,
         collate_fn=utils.collate_fn)
 
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=1, shuffle=False, num_workers=4,
         collate_fn=utils.collate_fn)
-
+    print("data loader : done ")
     # get the model using our helper function
     model = detection(num_classes)
 
@@ -45,13 +56,15 @@ def train():
 
     # let's train it for 10 epochs
     num_epochs = 10
-
+    print("start epochs ")
     for epoch in range(num_epochs):
         # train for one epoch, printing every 10 iterations
         train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
+        print("train_one_epoch")
         # update the learning rate
         lr_scheduler.step()
         # evaluate on the test dataset
         evaluate(model, data_loader_test, device=device)
-
+        print("evaluate")
     print("That's it!")
+train()
