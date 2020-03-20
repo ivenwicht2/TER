@@ -1,12 +1,18 @@
-import torch
+from torchvision.models.detection import FasterRCNN
+from torchvision.models.detection.rpn import AnchorGenerator
+import torch 
+from model_build import  detection
+from monoset import import_dataset
 from dataset import PennFudanDataset
-from engine import train_one_epoch, evaluate
-import utils
-from model_build import detection
-import os
 import transforms as T
-
-#os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+import utils
+import numpy as np
+import torchvision 
+from torchvision import transforms
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from PIL import Image
+from torch import nn,optim
 
 def get_transform(train):
     transforms = []
@@ -15,56 +21,53 @@ def get_transform(train):
         transforms.append(T.RandomHorizontalFlip(0.5))
     return T.Compose(transforms)
 
+
 def train():
 
-    print('start')
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
-    # our dataset has two classes only - background and person
-    num_classes = 10
-    # use our dataset and defined transformations
     dataset = PennFudanDataset('VOCdevkit',get_transform(train=True))
     dataset_test = PennFudanDataset('VOCdevkit',get_transform(train=False))
-    # split the dataset in train and test set
     indices = torch.randperm(len(dataset)).tolist()
     dataset = torch.utils.data.Subset(dataset, indices[:-50])
     dataset_test = torch.utils.data.Subset(dataset_test, indices[-50:])
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # define training and validation data loaders
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=1, shuffle=True, num_workers=4,
-        collate_fn=utils.collate_fn)
+        dataset, batch_size=2, shuffle=True, num_workers=4,
+        collate_fn=utils.collate_fn,pin_memory=True)
 
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=1, shuffle=False, num_workers=4,
         collate_fn=utils.collate_fn)
     print("data loader : done ")
-    # get the model using our helper function
-    model = detection(num_classes)
+    #model = detection(10)
+    #model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)    
+    
 
-    # move model to the right device
+    backbone = torchvision.models.mobilenet_v2(pretrained=True).features
+    backbone.out_channels = 1280
+    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256, 512),),
+                                   aspect_ratios=((0.5, 1.0, 2.0),))
+    roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=[0],
+                                                output_size=7,
+                                                sampling_ratio=2)
+
+    model = FasterRCNN(backbone,
+                   num_classes=2,
+                   rpn_anchor_generator=anchor_generator,
+                   box_roi_pool=roi_pooler)
+
     model.to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
+ 
+    for epoch ,(images, targets) in enumerate(data_loader) : 
+       print("epoch : " , epoch)
+       print(type(targets))
+       #targets.to(device),images.to(device)
+       model(images, targets)
 
-    # construct an optimizer
-    params = [p for p in model.parameters() if p.requires_grad]
-    optimizer = torch.optim.SGD(params, lr=0.005,
-                                momentum=0.9, weight_decay=0.0005)
-    # and a learning rate scheduler
-    lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer,
-                                                   step_size=3,
-                                                   gamma=0.1)
+if __name__ == "__main__":
+    train()
 
-    # let's train it for 10 epochs
-    num_epochs = 10
-    print("start epochs ")
-    for epoch in range(num_epochs):
-        # train for one epoch, printing every 10 iterations
-        train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
-        print("train_one_epoch")
-        # update the learning rate
-        lr_scheduler.step()
-        # evaluate on the test dataset
-        evaluate(model, data_loader_test, device=device)
-        print("evaluate")
-    print("That's it!")
-train()
