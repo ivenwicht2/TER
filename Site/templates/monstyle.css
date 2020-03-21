@@ -14,22 +14,22 @@ body{
 }
 
 img{
-    /*float: left;*/
+    float: left;
     margin-right: auto;
-    margin-left: auto;
-    margin-top: -10px;
+    margin-left: 1%;
+    margin-top: -30px;
 }
 
 h1 {
-    font-size : 50px;
+    font-size : 30px;
     color:black;
-    margin-left: 10px;
-    text-align: center;
+    margin-left: 100px;
+    text-align: left;
 }
 
-p {
+p { 
     width: 100%;
-    margin-left: 10px;
+    margin-left: 100px;
 }
 
 #intro{
@@ -38,4 +38,34 @@ p {
     margin-left: auto;
     color: black;
 
+}
+
+nav ul{
+    padding: 0px;
+    margin: 0px;
+    list-style-type:none;
+    background-color: #1C1C1C;
+}
+
+nav li{
+    display:inline-block;
+    width:24.8%;
+    height:30px;
+    margin:0px;
+    padding:0px;
+    border-right:1px solid rgb(231, 231, 231);
+    text-align:center;
+    line-height: 30px;
+
+}
+
+nav li a:hover{
+    background-color:rgb(231, 231, 231);
+    color:#1C1C1C;
+}
+
+nav li a{
+    display:block;
+    text-decoration:none;
+    color:white;
 }
