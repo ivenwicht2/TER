@@ -1,5 +1,5 @@
 *{
-	font-family: "Arial";
+	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva', 'Verdana', 'sans-serif';
 }
 
 body{
@@ -8,37 +8,33 @@ body{
     border-color: rgb(80, 80, 78);
     margin-right: auto;
     margin-left: auto;
+    margin-top: 0px;
     width: 100% ;
     background-color:rgb(231, 231, 231);
-
 }
 
-img{
-    float: left;
-    margin-right: auto;
-    margin-left: 1%;
-    margin-top: -30px;
-}
+/* TITRES ET PARAGRAPHES */
 
 h1 {
-    font-size : 30px;
+    font-size : 27px;
     color:black;
-    margin-left: 100px;
+    margin-left: 8%;
+    text-align: left;
+}
+
+h2 {
+    font-size : 23px;
+    color:black;
+    margin-left: 8%;
     text-align: left;
 }
 
 p { 
-    width: 100%;
-    margin-left: 100px;
+    width: 92%;
+    margin-left: 8%;
 }
 
-#intro{
-    text-align: center;
-    margin-right: auto;
-    margin-left: auto;
-    color: black;
-
-}
+/* MENU ET STYLE DU MENU */
 
 nav ul{
     padding: 0px;
@@ -49,14 +45,13 @@ nav ul{
 
 nav li{
     display:inline-block;
-    width:24.8%;
+    width:24.92%;
     height:30px;
     margin:0px;
     padding:0px;
-    border-right:1px solid rgb(231, 231, 231);
+    border-right:0px solid rgb(231, 231, 231);
     text-align:center;
     line-height: 30px;
-
 }
 
 nav li a:hover{
@@ -68,4 +63,36 @@ nav li a{
     display:block;
     text-decoration:none;
     color:white;
+}
+
+/* STYLE DES BLOCS DE COULEUR */
+
+#blockaccueil{
+    font-size : 15px;
+    color:black;
+    margin-left: 0%;
+    margin-right: 0%;
+    text-align: left;
+    background-color: lightgrey;
+    padding:1px;
+}
+
+#blocklabel{
+    font-size : 15px;
+    color:black;
+    margin-left: 0%;
+    margin-right: 0%;
+    text-align: left;
+    background-color: lightgrey;
+    padding: 1px;
+}
+
+/* IMAGE BORD GAUCHE */
+
+img{
+    float: left;
+    margin-right: auto;
+    margin-left: 1%;
+    margin-top: -30px;
+    border-image-repeat: repeat-y;
 }

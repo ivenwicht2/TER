@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="monstyle.css" />
 </head>
 
-<!-- MENU -->
 <body>
+
+    <!-- MENU -->
     <nav>
         <ul>
             <li><a href="Accueil.html">Accueil</a></li><!--
@@ -17,7 +18,8 @@
         </ul>
     </nav>
 
-    <!--<img src="barre.png" height="100%" >-->
+    <!-- IMAGE BORD GAUCHE -->
+    <img src="barre.png" width="5%">
 
 <!--
     <svg height = "30px" width = "100%">
@@ -34,23 +36,27 @@
 
 -->
 
-<!--TITRE-->
+    <!--TITRE-->
     <h1> Bienvenue sur le site Pixoglyphe</h1>
 
-<!--BLOCK JAUNE-->
-    <svg height = "100px", width = "100%">
-        <rect width="100%" height="100" x="0" y="0" stroke="orange" stroke-width="3" fill="orange" /> ;
-        <text x="100" y="30" fill="black" font-size="10">Blablabalablablabalbaballbababallalabblabajdlbzvhqbvqbvuqbvuqebilbaablablabalablabalbablabalbabalbalabl</text>
-    </svg>
+    <!--BLOCK JAUNE-->
+    <div id="blockaccueil">
+        <p>
+            Le site <i>Pixoglyphe</i> vous permet d'analyser des scènes contenant différents signes hiéroglyphiques. Pour cela, il vous suffit d'importer une image et de lancer l'analyse. L'analyse peut durer quelques minutes et vous permettra de visualiser les différents signes présents sur la scène. Il vous suffira alors de cliquer sur un signe pour obtenir les images similaires. N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet "Labellisation". 
+        </p>
+    </div>
 
-<!--TITRE ANALYSE-->
-    <p>J'analyse un signe </p>
+    <!--TITRE ANALYSE-->
+    <h2>J'analyse un signe </h2>
+    
+    
+    <!--TELECHARGEMENT DE L IMAGE-->
     <div>
-    <form method=post enctype=multipart/form-data>
-        <input type=file name=photo>
-        <input type=submit value=Upload>
-    </form>
-</div>
+        <form method=post enctype=multipart/form-data>
+            <input type=file name=photo>
+            <input type=submit value=Upload>
+        </form>
+    </div>
        
 </body>
 </html>
