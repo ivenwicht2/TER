@@ -33,8 +33,8 @@ def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # define training and validation data loaders
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=2, shuffle=True, num_workers=0,
-        collate_fn=utils.collate_fn,pin_memory=False)
+        dataset, batch_size=2, shuffle=True, num_workers=4,
+        collate_fn=utils.collate_fn,pin_memory=True)
 
     data_loader_test = torch.utils.data.DataLoader(
         dataset_test, batch_size=1, shuffle=False, num_workers=4,
@@ -64,8 +64,7 @@ def train():
  
     for epoch ,(images, targets) in enumerate(data_loader) : 
        print("epoch : " , epoch)
-       targets = [x for x in targets]
-       print(type(images))
+       print(type(targets))
        #targets.to(device),images.to(device)
        model(images, targets)
 
