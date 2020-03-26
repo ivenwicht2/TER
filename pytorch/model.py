@@ -82,16 +82,8 @@ def pred(model,input) :
     return predicted , simi.cpu().detach().numpy()
 if __name__ == '__main__' :
 
-    test = Convnet('vgg16',3)
-    #test = pre_train("model/model",25088,3)
-    #trainloader,testloader = import_img("DATA")
-   # test = train_model(test,trainloader,testloader,3,1)
+    test = Convnet('vgg16',10)
+    trainloader,testloader = import_img("DATA")
+    test = train_model(test,trainloader,testloader,30,1)
     
     
-    from PIL import Image
-    import torchvision.transforms.functional as TF
-
-    image = Image.open('DATA/G43/G43_KIU862_55362 2.jpg')
-    x = TF.to_tensor(image)
-    x.unsqueeze_(0)
-    pred(test,x)
