@@ -4,7 +4,7 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route('/Accueil')
+@app.route('/')
 def accueil():
     return render_template('Accueil.html')
     
