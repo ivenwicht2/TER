@@ -45,13 +45,14 @@ nav ul{
 
 nav li{
     display:inline-block;
-    width:24.92%;
+    width:18.8%;
     height:30px;
     margin:0px;
     padding:0px;
     border-right:0px solid rgb(231, 231, 231);
     text-align:center;
     line-height: 30px;
+    margin-left: 6%;
 }
 
 nav li a:hover{
