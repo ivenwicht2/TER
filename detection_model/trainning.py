@@ -2,17 +2,15 @@ from torchvision.models.detection import FasterRCNN
 from torchvision.models.detection.rpn import AnchorGenerator
 import torch 
 from model_build import  detection
-from monoset import import_dataset
 from dataset import PennFudanDataset
 import transforms as T
-import utils
 import numpy as np
 import torchvision 
 from torchvision import transforms
-import matplotlib.pyplot as plt
-import matplotlib.patches as patches
-from PIL import Image
 from torch import nn,optim
+import utils
+import math 
+from engine import *
 
 def get_transform(train):
     transforms = []
@@ -33,40 +31,47 @@ def train():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # define training and validation data loaders
     data_loader = torch.utils.data.DataLoader(
-        dataset, batch_size=2, shuffle=True, num_workers=4,
-        collate_fn=utils.collate_fn,pin_memory=True)
+        dataset, batch_size=3, shuffle=True, num_workers=0,
+        collate_fn=utils.collate_fn)
 
     data_loader_test = torch.utils.data.DataLoader(
-        dataset_test, batch_size=1, shuffle=False, num_workers=4,
-        collate_fn=utils.collate_fn)
+        dataset_test, batch_size=2, shuffle=True, num_workers=0,collate_fn=utils.collate_fn)
     print("data loader : done ")
-    #model = detection(10)
-    #model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)    
+    
+    
+    model = detection(10)
+    model.to(device)
+    print("model importation : done ")
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+    exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
     
 
-    backbone = torchvision.models.mobilenet_v2(pretrained=True).features
-    backbone.out_channels = 1280
-    anchor_generator = AnchorGenerator(sizes=((32, 64, 128, 256, 512),),
-                                   aspect_ratios=((0.5, 1.0, 2.0),))
-    roi_pooler = torchvision.ops.MultiScaleRoIAlign(featmap_names=[0],
-                                                output_size=7,
-                                                sampling_ratio=2)
 
-    model = FasterRCNN(backbone,
-                   num_classes=2,
-                   rpn_anchor_generator=anchor_generator,
-                   box_roi_pool=roi_pooler)
-
-    model.to(device)
-    criterion = nn.CrossEntropyLoss()
-    optimizer_ft = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-    exp_lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer_ft, step_size=7, gamma=0.1)
- 
-    for epoch ,(images, targets) in enumerate(data_loader) : 
-       print("epoch : " , epoch)
-       print(type(targets))
-       #targets.to(device),images.to(device)
-       model(images, targets)
+    for epoch in range(50):
+        
+        print("epoch {} : ".format(epoch),end="")
+        for batch ,(images, targets) in enumerate(data_loader) : 
+           print("*",end="")
+           model.train()
+           model.zero_grad()
+           targets = [x for x in targets]
+           loss_dict = model(images, targets)
+           losses = sum(loss for loss in loss_dict.values())
+           loss_dict_reduced = utils.reduce_dict(loss_dict)
+           losses_reduced = sum(loss for loss in loss_dict_reduced.values())
+           loss_value = losses_reduced.item()
+           if not math.isfinite(loss_value):
+               print("Loss is {}, stopping training".format(loss_value))
+               print(loss_dict_reduced)
+               sys.exit(1)           
+           optimizer.zero_grad()
+           losses.backward()
+           optimizer.step()
+        
+        exp_lr_scheduler.step()
+        print()
+        evaluate(model,data_loader_test,device=device)
 
 if __name__ == "__main__":
     train()

@@ -4,8 +4,10 @@ import xml.etree.ElementTree as ET
 import numpy as np 
 import torch
 import transforms as T
+from torchvision import transforms
 
-
+use_cuda = torch.cuda.is_available()
+device = torch.device("cuda" if use_cuda else "cpu")
 
 class PennFudanDataset(object):
 	def __init__(self, root,transforms):
@@ -39,27 +41,31 @@ class PennFudanDataset(object):
 		root = ET.parse(annotation).getroot()
 		labels = []
 		num_objs = 0
+		area = []
 		for child in root : 
 			if "object" in child.tag :
-				box = {e.tag: int(e.text) for e in root.findall('.//bndbox/*')}
+				box = {e.tag: int(e.text) for e in child.findall('.//bndbox/*')}
 				tmp = [box['xmin'],box['ymin'],box['xmax'],box['ymax']]
 				boxes.append(tmp)
-				label =  {e.tag: e.text for e in root.findall('.//name')}
+				label =  {e.tag: e.text for e in child.findall('.//name')}
 				label_encod = self.dict[label['name']]
 				labels.append(label_encod)
+				area.append((tmp[3] - tmp[1]) * (tmp[2] - tmp[0]))
 				num_objs += 1
 
 		# convert everything into a torch.Tensor
-		boxes = torch.as_tensor(boxes, dtype=torch.float32)
-		labels = torch.as_tensor(np.array(labels), dtype=torch.int64)
+		image_id = torch.tensor([idx])
+		boxes = torch.as_tensor(boxes, dtype=torch.float32).to(device)
+		labels = torch.as_tensor(np.array(labels), dtype=torch.int64).to(device)
 		target = {}
+		target['image_id'] = image_id
 		target["boxes"] = boxes
 		target["labels"] = labels
-
+		target["area"] = torch.as_tensor(area)
+		target["iscrowd"] =  torch.zeros((num_objs,), dtype=torch.int64)
 		if self.transforms is not None :
 			img, target = self.transforms(img, target)
-
-		return img, target
+		return img.to(device), target
 
 	def __len__(self):
        		return len(self.imgs)
