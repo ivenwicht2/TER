@@ -90,10 +90,16 @@ nav li a{
 
 /* IMAGE BORD GAUCHE */
 
-img{
+#Barre{
     float: left;
     margin-right: auto;
     margin-left: 1%;
     margin-top: -30px;
     border-image-repeat: repeat-y;
+}
+
+#img1{
+    display: block;
+    margin-left: auto;
+    margin-right: auto
 }
