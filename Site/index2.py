@@ -20,6 +20,14 @@ def histo():
 def label():
     return render_template('Labellisation.html')
 
+@app.route('/Analyse')
+def analyse():
+    return render_template('Analyse.html')
+
+@app.route('/Apropos')
+def ap():
+    return render_template('apropos.html')
+
 if __name__ == "__main__":
     app.run()
     

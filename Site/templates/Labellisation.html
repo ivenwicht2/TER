@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Pixoglyphe - Labellisation</title>
-    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='monstyle2.css') }}">
+    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -12,9 +12,11 @@
     <nav>
         <ul>
             <li><a href="{{ url_for('accueil') }}">Accueil</a></li><!--
+            --><li><a href="{{ url_for('analyse') }}">Analyse</a></li><!--
             --><li><a href="{{ url_for('label') }}">Labellisation</a></li><!--
             --><li><a href="{{ url_for('histo') }}">Historique</a></li><!--
-            --><li><a href="{{ url_for('biblio') }}">Bibliothèque</a></li>
+            --><li><a href="{{ url_for('biblio') }}">Bibliothèque</a></li><!--
+            --><li><a href="{{ url_for('ap') }}">A propos</a></li>
         </ul>
     </nav>
 

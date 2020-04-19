@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Pixoglyphe - Accueil</title>
-	<link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='monstyle2.css') }}">
+	<link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
@@ -12,29 +12,16 @@
     <nav>
         <ul>
             <li><a href="{{ url_for('accueil') }}">Accueil</a></li><!--
+            --><li><a href="{{ url_for('analyse') }}">Analyse</a></li><!--
             --><li><a href="{{ url_for('label') }}">Labellisation</a></li><!--
             --><li><a href="{{ url_for('histo') }}">Historique</a></li><!--
-            --><li><a href="{{ url_for('biblio') }}">Bibliothèque</a></li>
+            --><li><a href="{{ url_for('biblio') }}">Bibliothèque</a></li><!--
+            --><li><a href="{{ url_for('ap') }}">A propos</a></li>
         </ul>
     </nav>
 
     <!-- IMAGE BORD GAUCHE -->
     <img id="Barre" src="{{ url_for('static', filename = 'barre.png') }}" width="5%">
-
-<!--
-    <svg height = "30px" width = "100%">
-        <rect width="100%" height="30" x="0" y="0" stroke="#1C1C1C" stroke-width="3" fill="#1C1C1C" />;
-        <rect width="25%" height="30" x="0%" y="0" stroke="rgb(231, 231, 231)" stroke-width="3" fill="rgb(231, 231, 231)" />;
-
--->
-        <!--<polygon points="200 30, 210 0 ,400 0, 410 30  " stroke="rgb(231, 231, 231)" stroke-width="3" fill="rgb(231, 231, 231)"/>;
-        <polygon points="500 30, 510 0 ,700 0, 710 30  " stroke="#1C1C1C" stroke-width="3" fill="#1C1C1C" />;-->
-<!--
-        <text x="10%" y="25" fill="black" font-size="18">Accueil</text>;
-        <text x="30%" y="25" fill="white" font-size="18">Labellisation</text>
-    </svg> 
-
--->
 
     <!--TITRE-->
     <h1> Bienvenue sur le site Pixoglyphe</h1>
@@ -45,18 +32,31 @@
             Le site <i>Pixoglyphe</i> vous permet d'analyser des scènes contenant différents signes hiéroglyphiques. Pour cela, il vous suffit d'importer une image et de lancer l'analyse. L'analyse peut durer quelques minutes et vous permettra de visualiser les différents signes présents sur la scène. Il vous suffira alors de cliquer sur un signe pour obtenir les images similaires. N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet "Labellisation". 
         </p>
     </div>
-
-    <!--TITRE ANALYSE-->
-    <h2>J'analyse un signe </h2>
-    
-    
-    <!--TELECHARGEMENT DE L IMAGE-->
-    <div>
-        <form method=post enctype=multipart/form-data>
-            <input type=file name=photo>
-            <input type=submit value=Upload>
-        </form>
+    <div id="espace">
     </div>
+
+    <!--ANIMATION https://www.guyom-design.com/blog/astuces/css/tuto_diapo_css/#! -->
+
+    <div class="contenu_carou_auto">
+      <div class="caroussel-image">
+      <img src="{{ url_for('static', filename = 'D4.jpg') }}" alt>
+      <img src="{{ url_for('static', filename = 'D21.png') }}" alt>
+      <img src="{{ url_for('static', filename = 'F35.jpg') }}" alt>
+      <img src="{{ url_for('static', filename = 'G17.jpg') }}" alt>
+      <img src="{{ url_for('static', filename = 'V30.png') }}" alt>
+      <img src="{{ url_for('static', filename = 'N35.png') }}" alt>
+      <img src="{{ url_for('static', filename = 'M17.jpg') }}" alt>
+      <img src="{{ url_for('static', filename = 'X8.jpg') }}" alt>
+      </div>
+      </div>
+
+   <div id="espace">
+    </div>
+    
+        <p>
+            Rendez-vous dans l'onglet "Analyse" !
+        </p>
+
        
 </body>
 </html>
