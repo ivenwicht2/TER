@@ -15,7 +15,7 @@ import torch
 import pickle 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model = torch.load("script/save/model").to(device)
+model = torch.load("script/save/model",map_location=torch.device(device))
 with open('script/save/simi', 'rb') as handle:
     all_simi = pickle.load(handle)
 with open('script/save/path_simi', 'rb') as handle:

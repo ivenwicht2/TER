@@ -9,7 +9,7 @@ import torch.nn.functional as F
 def model_prediction(url,device,model,all_simi,all_path):
 
     
-    tmp = os.path.realpath('images')
+    #tmp = os.path.realpath('images')
     url = url.split(r'/')[-1]
     url = 'images/' + url
     im = Image.open(url)
