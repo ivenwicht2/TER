@@ -5,12 +5,22 @@ from flask import Flask, request,render_template,url_for
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 import sys
 #sys.path.insert(1, 'script')
-from backend import model
+from backend import model_prediction
 import io
 from PIL import Image
 import base64
 import numpy as np
 import itertools
+import torch 
+import pickle 
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model = torch.load("script/save/model").to(device)
+with open('script/save/simi', 'rb') as handle:
+    all_simi = pickle.load(handle)
+with open('script/save/path_simi', 'rb') as handle:
+    all_path = pickle.load(handle)
+
 
 app = Flask(__name__)
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
@@ -35,9 +45,6 @@ def histo():
 def label():
     return render_template('Labellisation.html')
 
-"""@app.route('/Analyse')
-def analyse():
-    return render_template('Analyse.html')"""
 
 @app.route('/Apropos')
 def ap():
@@ -48,21 +55,17 @@ def analyse():
     if request.method == 'POST' and 'photo' in request.files:
         filename = photos.save(request.files['photo'])
         file_url = photos.url(filename)
-        path,label,element = model(file_url)
+        path,label,element = model_prediction(file_url,device,model,all_simi,all_path)
         result = []
         for el in path :
-            #img = Image.fromarray((el*255).astype(np.uint8))
             img = Image.fromarray((el).astype(np.uint8))
             file_object = io.BytesIO()
             img.save(file_object, 'jpeg',quality=100)
             figdata_jgp = base64.b64encode(file_object.getvalue())
             result.append(figdata_jgp.decode('ascii'))
-            print(np.shape(label),np.shape(el))
         return render_template('Analyse.html',image = file_url,label = element, results=zip(result,label))
     return render_template('Analyse.html')
 
 if __name__ == "__main__":
     app.run()
     
-#app.run(threaded=False)
-#render_template('index2.html')

@@ -1,6 +1,6 @@
 from PIL import Image
 from scipy import spatial
-import pytorch
+import torch 
 import numpy as np 
 import os
 import pickle
@@ -23,7 +23,7 @@ def crop(image, coord):
 
 def extraction_rep(image):
     """ extrait l'espace de représentation """
-    model = pytorch.load("save/model")
+    model = torch.load("save/model")
     model.to("cuda" if torch.cuda.is_available() else "cpu")
     simi = None
     def hook(module, input_, output):
