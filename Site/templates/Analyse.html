@@ -44,6 +44,13 @@
         </form>
     </div>
        
+    <td>{{ label }}</td><br>
+    <img src="{{ image }}" alt="Main Image" height="150" width="150"><br>
+     {% for img_name,label_simi in results %}
+                <tr> <td>{{ label_simi }}</td>
+                    <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
+                </tr>
+            {% endfor %}
 
     <!-- ANIMATION DE CHARGEMENT -->
 
