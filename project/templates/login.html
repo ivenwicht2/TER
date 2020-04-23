@@ -1,20 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Pixoglyphe - Accueil</title>
+    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='login5.css') }}" />
+</head>
+
+<body>
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Login</h3>
+    <div class="field">
+    <h2>Bienvenue sur le site Pixoglyphe</h2>
+    <h3 class="title">Je me connecte</h3>
+</div>
     <div class="box">
         <form method="POST" action="/">
             <div class="field">
-                <div class="control">
-                    <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="">
+                    <label for="email">E-mail</label>
+                <div class="control" >
+                    <input id="email" class="input is-large" type="email" name="email" placeholder="exemple@gmail.com" autofocus="">
                 </div>
+            
             </div>
 
             <div class="field">
+                    <label for="pass">Mot de passe</label>
                 <div class="control">
-                    <input class="input is-large" type="password" name="password" placeholder="Your Password">
+                    <input id="pass" class="input is-large" type="password" name="password" placeholder="**********">
                 </div>
             </div>
-            <button class="button is-block is-info is-large is-fullwidth">Login</button>
-            <a href="{{ url_for('auth.signup') }}">sign up</a>
+
+            <div id="espace">
+            </div>
+
+            <div class="field">
+            <button class="button is-block is-info is-large is-fullwidth">Se connecter</button>
+            </div>
+
+            <div class="field">
+            <a href="{{ url_for('auth.signup') }}">Je n'ai pas encore de compte ?</a>
+            </div>
+
         </form>
     </div>
 </div>
+ 
+</body>
+</html>

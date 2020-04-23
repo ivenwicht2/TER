@@ -1,0 +1,36 @@
+div.field {
+  text-align:center;
+	}
+h3.title{
+text-align:center;
+}
+#espace{
+  height: 30px;
+}
+
+input[type=email] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid yellow;
+}
+
+input[type=password] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid yellow;
+}
+
+input[type=text] {
+  width: 30%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid yellow;
+}

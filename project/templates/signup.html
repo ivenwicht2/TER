@@ -1,29 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Pixoglyphe - Accueil</title>
+    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='login5.css') }}" />
+</head>
+
+<body>
+
 {% with messages = get_flashed_messages() %}
 {% endwith %}
 <form method="POST" action="/signup">
 <div class="column is-4 is-offset-4">
-    <h3 class="title">Sign Up</h3>
+    <div class="field">
+    <h2>Bienvenue sur le site Pixoglyphe</h2>
+    <h3 class="title">Je créer mon compte</h3>
+</div>
     <div class="box">
         <form method="POST" action="/signup">
             <div class="field">
+                    <label for="email">E-mail</label>
                 <div class="control">
-                    <input class="input is-large" type="email" name="email" placeholder="Email" autofocus="">
+                    <input id="email" class="input is-large" type="email" name="email" placeholder="exemple@gmail.com" autofocus="">
                 </div>
             </div>
 
             <div class="field">
+                    <label for="name">Nom</label>
                 <div class="control">
-                    <input class="input is-large" type="text" name="name" placeholder="Name" autofocus="">
+                    <input id="name" class="input is-large" type="text" name="name" placeholder="Pierre" autofocus="">
                 </div>
             </div>
 
             <div class="field">
+                    <label for="pass">Mot de passe</label>
                 <div class="control">
-                    <input class="input is-large" type="password" name="password" placeholder="Password">
+                    <input id="pass" class="input is-large" type="password" name="password" placeholder="**********">
                 </div>
             </div>
-
+            <div class="field">
             <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
+            </div>
         </form>
     </div>
 </div>
+</body>
+</html>
