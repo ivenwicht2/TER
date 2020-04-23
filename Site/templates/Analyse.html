@@ -40,16 +40,21 @@
     <div>
         <form method=post enctype=multipart/form-data>
             <input type=file name=photo>
-            <input type=submit value=Upload>
+            <input type=submit value="Lancer l'analyse">
         </form>
     </div>
-       
-    <td>{{ label }}</td><br>
-    <img src="{{ image }}" alt="Main Image" height="150" width="150"><br>
+
+    <div class=up>   
+    <td>{{ label }}</td>
+    <br>
+    <img src="{{ image }}" alt="Main Image" width="300">
+    </div>
+    <br>
      {% for img_name,label_simi in results %}
-                <tr> <td>{{ label_simi }}</td>
+                <div class=gallery>
                     <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
-                </tr>
+                    <tr> <div class=desc><td>{{ label_simi }}</td></div>
+                </tr></div>
             {% endfor %}
 
     <!-- ANIMATION DE CHARGEMENT -->
