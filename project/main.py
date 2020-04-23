@@ -1,8 +1,7 @@
-from flask import Blueprint, render_template,request,current_app
 from . import db
-import sys
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-#sys.path.append("project/script/")
+from flask_login import login_required , current_user
+from flask import Blueprint, render_template,request,current_app
 from .backend import model_prediction
 from PIL import Image
 import base64
@@ -13,7 +12,6 @@ import io
 from project import create_app
 import os 
 from werkzeug.utils import secure_filename
-from flask_login import login_required , current_user
 
 main = Blueprint('main', __name__)
 
@@ -21,7 +19,14 @@ main = Blueprint('main', __name__)
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = create_app()
 
+def save(dic):
+    with open('project/script/save/historique', 'wb') as handle:
+        pickle.dump(dic, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+def load():
+    with open('project/script/save/historique', 'rb') as handle:
+        b = pickle.load(handle)
+    return b 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = torch.load("project/script/save/model",map_location=torch.device(device))
@@ -47,6 +52,17 @@ def biblio():
 @main.route('/Historique')
 @login_required
 def histo():
+    id = current_user.id
+    id = str(id)
+    print('id : ',id)
+    if os.path.isfile('project/script/save/historique.npy'):
+        histo = load()
+        if id in histo.keys() :
+            print(histo[id])
+        else : print('None')
+    else :
+        print("None")
+
     return render_template('Historique.html')
     
 @main.route('/Labellisation')
@@ -64,18 +80,18 @@ def ap():
 @login_required
 def analyse():
     if request.method == 'POST':
-        print("1")
         if 'file' not in request.files:
             return render_template('Analyse.html')
         file = request.files['file']
         print(file)
         if file and allowed_file(file.filename):
-            print("2")
             filename = secure_filename(file.filename)
             filename = filename.replace('\\','/')
             file_url = os.path.join('project/images/', filename)
             file.save(file_url)
-            
+
+
+
             origin = Image.open(file_url)
             file_object = io.BytesIO()
             origin.save(file_object, 'jpeg',quality=100)
@@ -83,6 +99,29 @@ def analyse():
             origine_saved = figdata_jgp.decode('ascii')
 
             path,label,element = model_prediction(file_url,device,model,all_simi,all_path)
+
+            id = current_user.id
+            id = str(id)
+            print('id : ',id)
+            print('label : ',element)
+            if os.path.isfile('project/script/save/historique'):
+                histo = load()
+                if id in histo :
+                    histo[id].insert(0,element[0]+"/"+filename)
+                    if len(histo[id])>20 : histo[id].pop()
+                    save(histo)
+                else :
+                    print(histo)
+                    histo[id] = []
+                    histo[id].insert(0,element[0]+"/"+filename)
+                    save(histo)
+            else:
+                histo = {}
+                histo[id] = []
+                histo[id].insert(0,element[0]+"/"+filename)
+                save(histo)
+
+
             result = []
             for el in path :
                 img = Image.fromarray((el).astype(np.uint8))
