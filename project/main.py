@@ -2,8 +2,8 @@ from flask import Blueprint, render_template,request,current_app
 from . import db
 import sys
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
-sys.path.append("project/script/")
-from backend import model_prediction
+#sys.path.append("project/script/")
+from .backend import model_prediction
 from PIL import Image
 import base64
 import numpy as np
@@ -24,7 +24,7 @@ app = create_app()
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model = torch.load("project/script/save/model").to(device)
+model = torch.load("project/script/save/model",map_location=torch.device(device))
 with open('project/script/save/simi', 'rb') as handle:
     all_simi = pickle.load(handle)
 with open('project/script/save/path_simi', 'rb') as handle:
