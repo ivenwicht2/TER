@@ -13,6 +13,7 @@ import io
 from project import create_app
 import os 
 from werkzeug.utils import secure_filename
+from flask_login import login_required , current_user
 
 main = Blueprint('main', __name__)
 
@@ -33,35 +34,34 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
-
-@main.route('/')
+@main.route('/accueil')
+@login_required
 def accueil():
     return render_template('accueil.html')
 
-@main.route('/profile')
-def profile():
-    return render_template('profile.html')
-
-
 @main.route('/Bibliotheque')
+@login_required
 def biblio():
     return render_template('Bibliotheque.html')
     
 @main.route('/Historique')
+@login_required
 def histo():
     return render_template('Historique.html')
     
 @main.route('/Labellisation')
+@login_required
 def label():
     return render_template('Labellisation.html')
 
 
 @main.route('/Apropos')
+@login_required
 def ap():
     return render_template('apropos.html')
 
 @main.route('/Analyse', methods=['GET', 'POST'])
+@login_required
 def analyse():
     if request.method == 'POST':
         print("1")
