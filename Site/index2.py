@@ -22,6 +22,7 @@ with open('script/save/path_simi', 'rb') as handle:
     all_path = pickle.load(handle)
 
 
+
 app = Flask(__name__)
 app.config['UPLOADED_PHOTOS_DEST'] = os.path.realpath('images')
 
