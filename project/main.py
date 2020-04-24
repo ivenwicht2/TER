@@ -136,7 +136,7 @@ def analyse():
                 img.save(file_object, 'jpeg',quality=100)
                 figdata_jgp = base64.b64encode(file_object.getvalue())
                 result.append(figdata_jgp.decode('ascii'))
-            return render_template('Analyse.html',image = origine_saved ,label = element, results=zip(result,label))
+            return render_template('Analyse.html',image = origine_saved ,label = element[0], results=zip(result,label))
     return render_template('Analyse.html')
 
         
