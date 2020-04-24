@@ -45,15 +45,19 @@
             <input type=submit value=Upload>
         </form>
     </div>
-       
-    <td>{{ label }}</td><br>
+
+    <div class="gallery2">  
+     <br>
     {% if image%}
+    <div class="desc2"><td>Prédiction : {{ label }}</td></div>
       <img src="data:image/jpg;base64,{{  image|safe }}" alt="Main Image" height="150" width="150"><br>
       {% endif %}
      {% for img_name,label_simi in results %}
-                <div class="gallery"><tr> 
+    </div>
+    
+                <div class="gallery2"><tr> 
                     <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
-                    <div class="desc"><td>{{ label_simi }}</td></div>
+                    <div class="desc2"><td>{{ label_simi }}</td></div>
                 </tr></div>
             {% endfor %}
 

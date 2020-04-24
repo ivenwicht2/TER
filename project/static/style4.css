@@ -41,19 +41,19 @@ nav ul{
     margin: 0px;
     list-style-type:none;
     background-color: #1C1C1C;
-    margin-left: 4%;
+    margin-left: 5%;
 }
 
 nav li{
     display:inline-block;
-    width:11.5%;
+    width:12.5%;
     height:30px;
     margin:0px;
     padding:0px;
-    border-right:0px solid rgb(231, 231, 231);
+    border-right:1px solid rgb(231, 231, 231);
     text-align:center;
     line-height: 30px;
-    margin-left: 1%;
+    margin-left: 0%;
 }
 
 nav li a:hover{
@@ -118,7 +118,7 @@ div.gallery {
     width: 210px;
     transition: .5s ease; 
   }
-  
+
   div.gallery:hover {
     border: 1px solid #777;
     opacity: 0.4; 
@@ -128,11 +128,35 @@ div.gallery {
     width: 100%;
     height: auto;
   }
-  
+
   div.desc {
     padding: 15px;
     text-align: center;
   }
+
+  div.gallery2 {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    height: 260px;
+    transition: .5s ease; 
+  }
+
+  div.gallery2:hover {
+    border: 1px solid #777;
+    opacity: 0.4; 
+  }
+  
+  div.gallery2 img {
+    width: auto;
+    height: 80%;
+  }
+
+  div.desc2 {
+    padding: 10px;
+    text-align: center;
+  }
+
 
   /* ANIMATION DE CHARGEMENT 1 */
   /*
