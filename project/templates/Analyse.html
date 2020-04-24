@@ -47,9 +47,9 @@
     </div>
        
     <td>{{ label }}</td><br>
-    {% for img in image %}
-      <img src="data:image/jpg;base64,{{  img|safe }}" alt="Main Image" height="150" width="150"><br>
-    {% endfor %}
+    {% if image%}
+      <img src="data:image/jpg;base64,{{  image|safe }}" alt="Main Image" height="150" width="150"><br>
+      {% endif %}
      {% for img_name,label_simi in results %}
                 <div class="gallery"><tr> 
                     <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
