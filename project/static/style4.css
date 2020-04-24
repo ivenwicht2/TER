@@ -468,3 +468,17 @@ to{transform:rotatey(1turn)}}
   margin: 4px 2px;
   cursor: pointer;
   }
+
+  input.test {
+    width: 15%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 2px solid black;
+    background-color: rgb(231, 231, 231);
+  }
+
+  div.field {
+    text-align:center;
+    }
