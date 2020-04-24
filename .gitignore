@@ -3,3 +3,4 @@ __pycache__
 project/script/save/historique
 project/script/save/model
 Site/script/save/model
+project/script/save/detection_model
