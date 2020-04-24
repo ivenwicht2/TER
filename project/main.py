@@ -56,11 +56,18 @@ def histo():
     id = current_user.id
     id = str(id)
     print('id : ',id)
-    if os.path.isfile('project/script/save/historique.npy'):
+    if os.path.isfile('project/script/save/historique'):
         histo = load()
         if id in histo :
             image_histo , labels_histo = loading_histo(histo[id])
-            render_template('Analyse.html',results=zip(image_histo , labels_histo))
+            result = []
+            for el in image_histo :
+                img = Image.open(el).convert('RGB')
+                file_object = io.BytesIO()
+                img.save(file_object, 'jpeg',quality=100)
+                figdata_jgp = base64.b64encode(file_object.getvalue())
+                result.append(figdata_jgp.decode('ascii'))
+            return render_template('Historique.html',results=zip(result , labels_histo))
         else : print('None')
     else :
         print("None")
