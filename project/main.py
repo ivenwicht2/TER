@@ -13,6 +13,7 @@ from project import create_app
 import os 
 from werkzeug.utils import secure_filename
 from .histo import loading_histo
+from .detection import detection_image
 
 main = Blueprint('main', __name__)
 
@@ -31,6 +32,9 @@ def load():
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model = torch.load("project/script/save/model",map_location=torch.device(device))
+detection_model = torch.load("project/script/save/detection_model",map_location=torch.device(device))
+
+
 with open('project/script/save/simi', 'rb') as handle:
     all_simi = pickle.load(handle)
 with open('project/script/save/path_simi', 'rb') as handle:
@@ -87,6 +91,11 @@ def ap():
 
 @main.route('/Analyse', methods=['GET', 'POST'])
 @login_required
+def anal():
+    return render_template('Analyse.html')
+
+@main.route('/Analyse', methods=['GET', 'POST'])
+@login_required
 def analyse():
     if request.method == 'POST':
         if 'file' not in request.files:
@@ -140,7 +149,30 @@ def analyse():
     return render_template('Analyse.html')
 
         
-@main.route('/Detection')
+@main.route('/Detection', methods=['GET', 'POST'])
 @login_required
 def detec():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return render_template('Analyse.html')
+        file = request.files['file']
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filename = filename.replace('\\','/')
+            file_url = os.path.join('project/images/', filename)
+            file.save(file_url)
+            img = detection_image(file_url,detection_model)
+
+            file_object = io.BytesIO()
+            img.save(file_object, 'jpeg',quality=100)
+            figdata_jgp = base64.b64encode(file_object.getvalue())
+            result = figdata_jgp.decode('ascii')
+
+            return render_template('Detected.html', image = result)
+
     return render_template('Detection.html')
+
+    @main.route('/Detection')
+    @login_required
+    def detection():
+        return render_template('Detection.html')
