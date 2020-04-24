@@ -12,6 +12,7 @@ import io
 from project import create_app
 import os 
 from werkzeug.utils import secure_filename
+from .histo import loading_histo
 
 main = Blueprint('main', __name__)
 
@@ -57,8 +58,9 @@ def histo():
     print('id : ',id)
     if os.path.isfile('project/script/save/historique.npy'):
         histo = load()
-        if id in histo.keys() :
-            print(histo[id])
+        if id in histo :
+            image_histo , labels_histo = loading_histo(histo[id])
+            render_template('Analyse.html',results=zip(image_histo , labels_histo))
         else : print('None')
     else :
         print("None")
@@ -92,7 +94,7 @@ def analyse():
 
 
 
-            origin = Image.open(file_url)
+            origin = Image.open(file_url).convert('RGB')
             file_object = io.BytesIO()
             origin.save(file_object, 'jpeg',quality=100)
             figdata_jgp = base64.b64encode(file_object.getvalue())
@@ -102,8 +104,6 @@ def analyse():
 
             id = current_user.id
             id = str(id)
-            print('id : ',id)
-            print('label : ',element)
             if os.path.isfile('project/script/save/historique'):
                 histo = load()
                 if id in histo :

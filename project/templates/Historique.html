@@ -32,6 +32,11 @@
     <p>
         Retrouvez ici toutes les analyses que vous avez déjà effectuées ainsi que leurs résultats. 
     </p>
+    {% for img,label in results %}
+                <tr> <td>{{ label }}</td>
+                    <td><img src="data:image/jpg;base64,{{ img|safe }}"  height="150" width="150"></td>
+                </tr>
+    {% endfor %}
 </div>
        
 </body>
