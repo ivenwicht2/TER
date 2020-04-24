@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Pixoglyphe - Accueil</title>
-    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='style4.css') }}" />
 </head>
 
 <body>
@@ -14,6 +14,7 @@
             <li><a href="{{ url_for('main.accueil') }}">Accueil</a></li><!--
             --><li><a href="{{ url_for('main.analyse') }}">Analyse</a></li><!--
             --><li><a href="{{ url_for('main.label') }}">Labellisation</a></li><!--
+            --><li><a href="{{ url_for('main.detec') }}">Détection</a></li><!--
             --><li><a href="{{ url_for('main.histo') }}">Historique</a></li><!--
             --><li><a href="{{ url_for('main.biblio') }}">Bibliothèque</a></li><!--
             --><li><a href="{{ url_for('main.ap') }}">A propos</a></li><!--
@@ -48,9 +49,10 @@
     <td>{{ label }}</td><br>
     <img src="data:image/jpg;base64,{{ image|safe }}" alt="Main Image" height="150" width="150"><br>
      {% for img_name,label_simi in results %}
-                <tr> <td>{{ label_simi }}</td>
+                <div class="gallery"><tr> 
                     <td><img src="data:image/jpg;base64,{{ img_name|safe }}"  height="150" width="150"></td>
-                </tr>
+                    <div class="desc"><td>{{ label_simi }}</td></div>
+                </tr></div>
             {% endfor %}
 
     <!-- ANIMATION DE CHARGEMENT -->

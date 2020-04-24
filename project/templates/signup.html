@@ -3,19 +3,25 @@
 <head>
     <meta charset="UTF-8" />
     <title>Pixoglyphe - Accueil</title>
-    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='login5.css') }}" />
+    <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='login10.css') }}" />
 </head>
 
 <body>
 
 {% with messages = get_flashed_messages() %}
 {% endwith %}
+
 <form method="POST" action="/signup">
 <div class="column is-4 is-offset-4">
+    <div id="espace">
+    </div>
     <div class="field">
     <h2>Bienvenue sur le site Pixoglyphe</h2>
-    <h3 class="title">Je créer mon compte</h3>
+    <h3 class="title">Je crée mon compte</h3>
 </div>
+    <div class="fond">
+        <div id="espace">
+        </div>
     <div class="box">
         <form method="POST" action="/signup">
             <div class="field">
@@ -25,11 +31,17 @@
                 </div>
             </div>
 
+            <div id="espace">
+            </div>
+
             <div class="field">
                     <label for="name">Nom</label>
                 <div class="control">
-                    <input id="name" class="input is-large" type="text" name="name" placeholder="Pierre" autofocus="">
+                    <input id="name" class="input is-large" type="text" name="name" placeholder="Pseudo" autofocus="">
                 </div>
+            </div>
+
+            <div id="espace">
             </div>
 
             <div class="field">
@@ -38,10 +50,17 @@
                     <input id="pass" class="input is-large" type="password" name="password" placeholder="**********">
                 </div>
             </div>
+
+            <div id="espace">
+            </div>
+
             <div class="field">
-            <button class="button is-block is-info is-large is-fullwidth">Sign Up</button>
+            <button class="button is-block is-info is-large is-fullwidth">S'inscrire</button>
             </div>
         </form>
+        <div id="espace">
+        </div>
+    </div>
     </div>
 </div>
 </body>

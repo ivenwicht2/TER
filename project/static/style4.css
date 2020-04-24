@@ -41,18 +41,19 @@ nav ul{
     margin: 0px;
     list-style-type:none;
     background-color: #1C1C1C;
+    margin-left: 4%;
 }
 
 nav li{
     display:inline-block;
-    width:5%;
+    width:11.5%;
     height:30px;
     margin:0px;
     padding:0px;
     border-right:0px solid rgb(231, 231, 231);
     text-align:center;
     line-height: 30px;
-    margin-left: 6%;
+    margin-left: 1%;
 }
 
 nav li a:hover{
@@ -103,7 +104,7 @@ nav li a{
 #Barre{
     float: left;
     margin-right: auto;
-    margin-left: 1%;
+    margin-left: 0%;
     margin-top: -30px;
     border-image-repeat: repeat-y;
 }
