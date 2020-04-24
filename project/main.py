@@ -138,3 +138,9 @@ def analyse():
                 result.append(figdata_jgp.decode('ascii'))
             return render_template('Analyse.html',image = origine_saved ,label = element, results=zip(result,label))
     return render_template('Analyse.html')
+
+        
+@main.route('/Detection')
+@login_required
+def detec():
+    return render_template('Detection.html')
