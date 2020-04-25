@@ -89,7 +89,7 @@ def label():
 def ap():
     return render_template('apropos.html')
 
-@main.route('/Analyse', methods=['GET', 'POST'])
+@main.route('/Analyse')
 @login_required
 def anal():
     return render_template('Analyse.html')
