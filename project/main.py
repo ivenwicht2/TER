@@ -1,7 +1,7 @@
 from . import db
 from flask_uploads import UploadSet, configure_uploads, IMAGES, patch_request_class
 from flask_login import login_required , current_user
-from flask import Blueprint, render_template,request,current_app
+from flask import Blueprint, render_template,request,current_app,redirect, url_for
 from .backend import model_prediction
 from PIL import Image
 import base64
@@ -14,6 +14,7 @@ import os
 from werkzeug.utils import secure_filename
 from .histo import loading_histo
 from .detection import detection_image
+from .active_learning import learning,move_img
 
 main = Blueprint('main', __name__)
 
@@ -81,8 +82,24 @@ def histo():
 @main.route('/Labellisation')
 @login_required
 def label():
-    return render_template('Labellisation.html')
+    img = learning()
+    if img == None :
+        return render_template('Labellisation.html')
 
+    file_object = io.BytesIO()
+    img.save(file_object, 'jpeg',quality=100)
+    figdata_jgp = base64.b64encode(file_object.getvalue())
+    result = figdata_jgp.decode('ascii')
+
+    return render_template('Labellisation.html', img = result)
+
+@main.route('/Labellisation', methods=['GET', 'POST'])
+@login_required
+def labelised():
+    classe = request.form.get('code')
+    if classe != "" :     
+        move_img(classe)
+    return  redirect(url_for('main.label'))
 
 @main.route('/Apropos')
 @login_required

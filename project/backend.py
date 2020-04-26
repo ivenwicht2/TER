@@ -5,6 +5,7 @@ import os
 import torch 
 import torchvision.transforms.functional as TF
 import torch.nn.functional as F
+from .active_learning import sorting 
 
 def model_prediction(url,device,model,all_simi,all_path):
 
@@ -33,5 +34,10 @@ def model_prediction(url,device,model,all_simi,all_path):
         save_img.append(  np.array(tmp_img)   )
 
     classes = os.listdir( os.path.realpath("project/stock_image"))
+
+
+    sorting(url,prediction,classes[np.argmax(prediction)])
+
+
     return save_img,label_simi,[classes[np.argmax(prediction)]]
 

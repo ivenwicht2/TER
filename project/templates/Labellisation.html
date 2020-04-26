@@ -38,8 +38,8 @@
 
     <!--TITRE ANALYSE-->
     <h2>Je labellise des images </h2>
-
-    <form method="POST" action="/">
+    {% if img%}
+    <form method="POST">
     <div class=field>
         <div>
         <label for="code">Quel est le code ce ce hiéroglyphe ?</label>
@@ -54,13 +54,15 @@
           <option value="I10">
             <option value="M17">
             <option value="N35">
-            <option value="S21">
             <option value="V30">
             <option value="X8">
           </datalist>
           <div>
-        <input type="submit"></div>
+        <input type="submit" ></div>
     </div>
+    
+        <img  src="data:image/jpg;base64,{{ img|safe }}" >
+        {% endif %}
       </form>
 
 </body>
