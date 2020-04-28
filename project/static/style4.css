@@ -109,6 +109,12 @@ nav li a{
     border-image-repeat: repeat-y;
 }
 
+#imgentre{
+  float : center;
+  width:19%;
+  margin-left: 38%;
+}
+
 /* BIBLIOTHEQUE D'IMAGES  https://www.w3schools.com/TAGS/att_img_alt.asp */
 
 div.gallery {

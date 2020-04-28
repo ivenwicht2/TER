@@ -18,7 +18,7 @@
             --><li><a href="{{ url_for('main.histo') }}">Historique</a></li><!--
             --><li><a href="{{ url_for('main.biblio') }}">Bibliothèque</a></li><!--
             --><li><a href="{{ url_for('main.ap') }}">A propos</a></li><!--
-            --><li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+            --><li><a href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
         </ul>
     </nav>
 
@@ -31,7 +31,10 @@
     <!--BLOCK JAUNE-->
     <div id="blockaccueil">
         <p>
-            Le site <i>Pixoglyphe</i> vous permet d'analyser des scènes contenant différents signes hiéroglyphiques. Pour cela, il vous suffit d'importer une image et de lancer l'analyse. L'analyse peut durer quelques minutes et vous permettra de visualiser les différents signes présents sur la scène. Il vous suffira alors de cliquer sur un signe pour obtenir les images similaires. N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet "Labellisation". 
+           Afin d'identifier les différents contextes d'utilisation d'un hiéroglyphe de votre choix il vous faut suivre les étapes suivantes :
+           <p><strong>Etape 1 : </strong>Selectionnez une image du hiéroglyphe dont vous souhaitez obtenir les images similaires, </p>
+           <p><strong>Etape 2 : </strong>Lancez l'analyse, </p>
+           <p><strong>Etape 3 : </strong>Visualisez les résultats : la prédiction de la classe de votre hiéroglyphe ainsi qu'une liste de six images similaires. </p>
         </p>
     </div>
 
@@ -42,7 +45,7 @@
     <div>
         <form method=post enctype=multipart/form-data>
             <input type=file name=file>
-            <input type=submit value=Upload>
+            <input type=submit value="Lancer l'analyse">
         </form>
     </div>
 

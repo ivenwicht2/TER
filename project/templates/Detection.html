@@ -18,7 +18,7 @@
             --><li><a href="{{ url_for('main.histo') }}">Historique</a></li><!--
             --><li><a href="{{ url_for('main.biblio') }}">Bibliothèque</a></li><!--
             --><li><a href="{{ url_for('main.ap') }}">A propos</a></li><!--
-            --><li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+            --><li><a href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
         </ul>
     </nav>
 
@@ -31,7 +31,10 @@
     <!--BLOCK JAUNE-->
     <div id="blockaccueil">
         <p>
-            Le site <i>Pixoglyphe</i> vous permet d'analyser des scènes contenant différents signes hiéroglyphiques. Pour cela, il vous suffit d'importer une image et de lancer l'analyse. L'analyse peut durer quelques minutes et vous permettra de visualiser les différents signes présents sur la scène. Il vous suffira alors de cliquer sur un signe pour obtenir les images similaires. N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet "Labellisation". 
+            Afin d'identifier des différents hiéroglyphes présents sur une scène, il vous faut suivre les étapes suivantes :
+            <p><strong>Etape 1 : </strong>Selectionnez une image de la scène dont vous souhaitez identifier les hiéroglyphes, </p>
+            <p><strong>Etape 2 : </strong>Lancez l'analyse, </p>
+            <p><strong>Etape 3 : </strong>Visualisez les résultats : les différents hiéroglyphes détectés encadrés en rouge ainsi que la prédiction de la classe de chaque hiéroglyphe détecté. </p>
         </p>
     </div>
 

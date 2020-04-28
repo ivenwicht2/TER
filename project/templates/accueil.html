@@ -19,7 +19,7 @@
             --><li><a href="{{ url_for('main.histo') }}">Historique</a></li><!--
             --><li><a href="{{ url_for('main.biblio') }}">Bibliothèque</a></li><!--
             --><li><a href="{{ url_for('main.ap') }}">A propos</a></li><!--
-            --><li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+            --><li><a href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
         </ul>
     </nav>
 
@@ -32,7 +32,14 @@
     <!--BLOCK JAUNE-->
     <div id="blockaccueil">
         <p>
-            Le site <i>Pixoglyphe</i> vous permet d'analyser des scènes contenant différents signes hiéroglyphiques. Pour cela, il vous suffit d'importer une image et de lancer l'analyse. L'analyse peut durer quelques minutes et vous permettra de visualiser les différents signes présents sur la scène. Il vous suffira alors de cliquer sur un signe pour obtenir les images similaires. N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet "Labellisation". 
+            Le site <i>Pixoglyphe</i> vous permet d'analyser hiéroglyphes et scènes complètes ! Pour cela, il vous suffit de vous rendre 
+            dans les onglets <a href="{{ url_for('main.analyse') }}"><strong>Analyse</strong></a> et <a href="{{ url_for('main.detec') }}"><strong>Détection</strong></a>. 
+            L'onglet <a href="{{ url_for('main.analyse') }}"><strong>Analyse</strong></a> permet d'identifier les différents contextes d'utilisation d'un hiéroglyphe.
+            L'ensemble des signes pris en main par le modèle de classification est disponible dans la <a href="{{ url_for('main.biblio') }}">bibliothèque des signes</a>.
+            La partie <a href="{{ url_for('main.detec') }}">détection</a>, quand à elle, vous permettra d'analyser une scène complète et d'identifier 
+            les différents hiéroglyphes qu'elle contient.  
+            L'historique de vos analyses de similarité vous est proposé dans l'onglet <a href="{{ url_for('main.histo') }}"><strong>Historique</strong> où vous retrouverez l'image que vous avez analysé ainsi que la classe prédite par le modèle</a>.
+            <p>N'oubliez pas, vous pouvez nous aider activement en vous rendant dans l'onglet <a href="{{ url_for('main.label') }}"><strong>Labellisation</strong></a> ! </p>
         </p>
     </div>
     <div id="espace">
@@ -55,10 +62,6 @@
 
    <div id="espace">
     </div>
-    
-        <p>
-            Rendez-vous dans l'onglet "Analyse" !
-        </p>
 
        
 </body>

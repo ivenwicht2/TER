@@ -18,7 +18,7 @@
             --><li><a href="{{ url_for('main.histo') }}">Historique</a></li><!--
             --><li><a href="{{ url_for('main.biblio') }}">Bibliothèque</a></li><!--
             --><li><a href="{{ url_for('main.ap') }}">A propos</a></li><!--
-            --><li><a href="{{ url_for('auth.logout') }}">Log out</a></li>
+            --><li><a href="{{ url_for('auth.logout') }}">Déconnexion</a></li>
         </ul>
     </nav>
 
@@ -31,9 +31,12 @@
     <!--BLOCK BLEU-->
     <div id="blocklabel">
         <p>
-            Afin d’améliorer les performances du site Pixoglyphe et de vous proposer le contenu le plus complet, nous vous proposons de labelliser les images pour lequel nous avons besoin d’aide. C’est grâce à vous que l’outil pourra se développer et s’avérer être de plus en plus efficace. Pour assurer la fiabilité des informations, la labellisation est réservée aux experts et se fait grâce aux code utilisés sur le site Karnak.             
+            Afin d’améliorer les performances du site Pixoglyphe et de vous proposer le contenu le plus complet, 
+            nous vous proposons de labelliser les images pour lesquelles nous avons besoin d’aide. C’est grâce à vous que 
+            l’outil pourra se développer et s’avérer être de plus en plus efficace. Pour assurer la fiabilité des informations, 
+            la labellisation est réservée aux experts et se fait grâce aux codes utilisés sur le site Karnak.             
         </p>
-        <p><strong>Pensez à labelliser uniquement les signes dont vous êtes certain du code.</strong></p>
+        <p><strong>Pensez à labelliser les signes uniquement lorsque vous êtes certain du code.</strong></p>
     </div>
 
     <!--TITRE ANALYSE-->
@@ -60,8 +63,10 @@
           <div>
         <input type="submit" ></div>
     </div>
+
+    <div id="espace"></div>
     
-        <img  src="data:image/jpg;base64,{{ img|safe }}" >
+        <img id=imgentre src="data:image/jpg;base64,{{ img|safe }}" >
         {% endif %}
       </form>
 
