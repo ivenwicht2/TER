@@ -8,7 +8,7 @@ def loading_histo(list_path):
     for path in list_path :
         if os.path.isfile('project/active_learning/'+path) :
             #img = Image.open('project/active_learning/'+path)
-            list_img.append('active_learning/'+path)
+            list_img.append('project/active_learning/'+path)
 
         elif os.path.isfile('project/stock_image/'+path) :
             #img = Image.open('project/stock_image/'+path)

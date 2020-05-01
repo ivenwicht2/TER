@@ -10,17 +10,33 @@ body{
     margin-left: auto;
     margin-top: 0px;
     width: 100% ;
-    background-color:rgb(231, 231, 231);
+    /*background-color:white;*/
+    /*background-image: url("{{ url_for('static', filename = 'sable.png') }}") ;*/
+}
+
+html{
+  background-image: url(sand.jpg); /*https://pixabay.com/fr/photos/sable-chameau-d%C3%A9sert-le-caire-3223302/*/
+  background-repeat:no-repeat;
+  background-position:top left;
 }
 
 div.field {
   text-align:center;
-	}
+  }
+
+
 h3.title{
 text-align:center;
+color: white;
+margin-top: 10px;
 }
+
 #espace{
   height: 30px;
+}
+
+#espace2{
+  height: 5px;
 }
 
 input[type=email] {
@@ -29,7 +45,8 @@ input[type=email] {
   margin: 8px 0;
   box-sizing: border-box;
   border: none;
-  border-bottom: 2px solid yellow;
+  border-bottom: 2px solid black;
+  background-color: rgb(231, 231, 231);
 }
 
 input[type=password] {
@@ -38,7 +55,8 @@ input[type=password] {
   margin: 8px 0;
   box-sizing: border-box;
   border: none;
-  border-bottom: 2px solid yellow;
+  border-bottom: 2px solid black;
+  background-color: rgb(231, 231, 231);
 }
 
 input[type=text] {
@@ -47,7 +65,8 @@ input[type=text] {
   margin: 8px 0;
   box-sizing: border-box;
   border: none;
-  border-bottom: 2px solid yellow;
+  border-bottom: 2px solid black;
+  background-color: rgb(231, 231, 231);
 }
 
 
@@ -64,13 +83,21 @@ input[type=text] {
 div.fond{
   margin-left: 30%;
   margin-right: 30%;
-  background-color: white;
   border-style: solid;
 	border-width: 0px;
   border-color: rgb(80, 80, 78);
-  box-shadow: rgb(80, 80, 78);
+  box-shadow:8px 8px 12px #aaa;
+  background-color: rgb(231, 231, 231);
 }
 
+div.titre{
+  margin-left: 0%;
+  margin-right: 0%;
+  height: 50px;
+  background-color: black;
+  border-style: solid;
+	border-width: 0px;
+}
 
 #Barre{
   float: left;
@@ -79,3 +106,8 @@ div.fond{
   margin-top: -30px;
   border-image-repeat: repeat-y;
 }
+
+IMG.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto }

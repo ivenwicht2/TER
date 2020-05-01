@@ -6,19 +6,26 @@
     <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='login10.css') }}" />
 </head>
 
-<body>
-
-    <div class="column is-4 is-offset-4">
-        <div id="espace">
-        </div>
-        <div class="field">
+<body >
+    <div class=field>
             <h2>Bienvenue sur le site Pixoglyphe</h2>
-    
-            <h3 class="title">Je me connecte</h3>
         </div>
+
+            <div id="espace2"></div>
+
+            <img class="logo" src="{{ url_for('static', filename = 'logo.png') }}" width="10%" >
+            
+            <div id="espace"></div>
+
         <div class="fond">
-            <div id="espace">
+
+            <div class="titre">
+                <div id="espace2"></div>
+            <h3 class="title">Je me connecte</h3>
             </div>
+
+            <div id="espace"></div>
+
         <div class="box">
         
         <form method="POST" action="/">
@@ -50,7 +57,7 @@
             </div>
 
             <div class="field">
-            <a href="{{ url_for('auth.signup') }}">Je n'ai pas encore de compte ?</a>
+            <a href="{{ url_for('auth.signup') }}" style="color:orange">Je n'ai pas encore de compte ?</a>
             </div>
             </form>
 
@@ -60,7 +67,6 @@
         </div>
 
         </div>
-    </div>
  
 </body>
 </html>

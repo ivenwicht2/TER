@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Pixoglyphe - Accueil</title>
+    <title>Pixoglyphe - Analyse</title>
     <link rel ="stylesheet" type="text/css" href="{{ url_for('static', filename='style4.css') }}" />
 </head>
 
@@ -40,20 +40,25 @@
 
     <!--TITRE ANALYSE-->
     <h2>J'analyse un signe </h2>
-
+    <div id="espace"></div>
+    
     <!--TELECHARGEMENT DE L IMAGE-->
-    <div>
+    <div id ="bouton">
         <form method=post enctype=multipart/form-data>
+         <!-- <div class="parent-div"> 
+          <button class="btn-upload">Choisir le fichier</button> -->
             <input type=file name=file>
+          <!-- </div> -->
             <input type=submit value="Lancer l'analyse">
         </form>
     </div>
 
+    <div id="espace"></div>
+
     <div class="gallery2">  
-     <br>
-    {% if image%}
-    <div class="desc2"><td>Prédiction : {{ label }}</td></div>
-      <img src="data:image/jpg;base64,{{  image|safe }}" alt="Main Image" height="150" width="150"><br>
+      {% if image%}
+      <img src="data:image/jpg;base64,{{  image|safe }}" alt="Main Image" height="150" width="150">
+      <div class="desc2"><td>Prédiction : {{ label }}</td></div>
       {% endif %}
      {% for img_name,label_simi in results %}
     </div>
